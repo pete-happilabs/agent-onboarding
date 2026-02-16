@@ -1,0 +1,111 @@
+# ============================================================================
+# TheMealDB - Free Meal/Recipe API Configuration
+# ============================================================================
+#
+# TheMealDB provides a FREE API for searching meals and recipes.
+# NO API KEY REQUIRED - works immediately!
+#
+# API Documentation: https://www.themealdb.com/api.php
+#
+# ============================================================================
+
+service:
+  name: "themealdb"
+  base_url: "https://www.themealdb.com/api/json/v1/1"
+
+agent:
+  prompt_name: "food_delivery"
+
+auth:
+  type: "none"  # Free API, no authentication needed
+
+tools:
+  - name: "search_meals"
+    description: "Search for meals/recipes by name"
+    endpoint: "/search.php"
+    method: "GET"
+    parameters:
+      - name: "s"
+        type: "string"
+        required: true
+        description: "Meal name to search for (e.g., 'pasta', 'chicken', 'curry')"
+        in: "query"
+    response_mapping:
+      items_path: "meals"
+      title_field: "strMeal"
+      description_field: "strInstructions"
+      image_field: "strMealThumb"
+      category_title: "Recipes"
+
+  - name: "search_by_category"
+    description: "List meals by category (e.g., Seafood, Vegetarian, Dessert)"
+    endpoint: "/filter.php"
+    method: "GET"
+    parameters:
+      - name: "c"
+        type: "string"
+        required: true
+        description: "Category name (Beef, Chicken, Dessert, Lamb, Miscellaneous, Pasta, Pork, Seafood, Side, Starter, Vegan, Vegetarian, Breakfast, Goat)"
+        in: "query"
+    response_mapping:
+      items_path: "meals"
+      title_field: "strMeal"
+      image_field: "strMealThumb"
+      category_title: "Category Results"
+
+  - name: "search_by_area"
+    description: "List meals by cuisine/area (e.g., Indian, Italian, Chinese)"
+    endpoint: "/filter.php"
+    method: "GET"
+    parameters:
+      - name: "a"
+        type: "string"
+        required: true
+        description: "Area/cuisine (American, British, Canadian, Chinese, Croatian, Dutch, Egyptian, Filipino, French, Greek, Indian, Irish, Italian, Jamaican, Japanese, Kenyan, Malaysian, Mexican, Moroccan, Polish, Portuguese, Russian, Spanish, Thai, Tunisian, Turkish, Vietnamese)"
+        in: "query"
+    response_mapping:
+      items_path: "meals"
+      title_field: "strMeal"
+      image_field: "strMealThumb"
+      category_title: "Cuisine Results"
+
+  - name: "get_meal_details"
+    description: "Get full details of a meal by ID"
+    endpoint: "/lookup.php"
+    method: "GET"
+    parameters:
+      - name: "i"
+        type: "string"
+        required: true
+        description: "Meal ID"
+        in: "query"
+    response_mapping:
+      items_path: "meals"
+      title_field: "strMeal"
+      description_field: "strInstructions"
+      image_field: "strMealThumb"
+      category_title: "Meal Details"
+
+  - name: "get_random_meal"
+    description: "Get a random meal suggestion"
+    endpoint: "/random.php"
+    method: "GET"
+    parameters: []
+    response_mapping:
+      items_path: "meals"
+      title_field: "strMeal"
+      description_field: "strInstructions"
+      image_field: "strMealThumb"
+      category_title: "Random Suggestion"
+
+  - name: "list_categories"
+    description: "List all meal categories"
+    endpoint: "/categories.php"
+    method: "GET"
+    parameters: []
+    response_mapping:
+      items_path: "categories"
+      title_field: "strCategory"
+      description_field: "strCategoryDescription"
+      image_field: "strCategoryThumb"
+      category_title: "Categories"

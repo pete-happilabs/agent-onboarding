@@ -1,0 +1,5 @@
+domain_name: swiggy
+entity_id: com.swiggy.food
+description: AI agent for food ordering
+model: gpt-4o-mini
+currency: INR

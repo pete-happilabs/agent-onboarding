@@ -1,0 +1,15 @@
+# ============================================================================
+# Custom REST API Agent - Requirements
+# ============================================================================
+
+# OpenAI API
+openai>=1.0.0
+
+# HTTP Client
+httpx>=0.25.0
+
+# YAML parsing
+pyyaml>=6.0
+
+# Environment variables
+python-dotenv>=1.0.0

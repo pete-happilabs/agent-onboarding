@@ -1,0 +1,5 @@
+domain_name: urban_company
+entity_id: com.urban.company
+description: AI agent for booking home services
+model: gpt-4o-mini
+currency: INR

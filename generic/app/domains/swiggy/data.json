@@ -1,0 +1,2284 @@
+{
+  "restaurants": [
+    {
+      "restaurant_id": "rest_001",
+      "name": "Punjabi Rasoi",
+      "description": "Authentic North Indian & Mughlai cuisine",
+      "cuisine": ["North Indian", "Mughlai"],
+      "rating": 4.3,
+      "reviews_count": 1200,
+      "delivery_time_mins": 30,
+      "cost_for_two": 400,
+      "location": {
+        "latitude": "12.9716",
+        "longitude": "77.5946",
+        "city": "Bangalore",
+        "area": "Koramangala"
+      },
+      "image_url": "https://via.placeholder.com/400x300?text=Punjabi+Rasoi",
+      "menu": [
+        {
+          "item_id": "rest_001_item_001",
+          "name": "Paneer Tikka",
+          "description": "Grilled cottage cheese with spices",
+          "price": 180,
+          "veg": true,
+          "category": "Starters",
+          "image_url": "https://via.placeholder.com/200x150?text=Paneer+Tikka"
+        },
+        {
+          "item_id": "rest_001_item_002",
+          "name": "Butter Chicken",
+          "description": "Creamy tomato-based chicken gravy",
+          "price": 280,
+          "veg": false,
+          "category": "Main Course"
+        },
+        {
+          "item_id": "rest_001_item_003",
+          "name": "Dal Makhani",
+          "description": "Slow-cooked black lentils in butter",
+          "price": 220,
+          "veg": true,
+          "category": "Main Course"
+        },
+        {
+          "item_id": "rest_001_item_004",
+          "name": "Tandoori Roti",
+          "price": 30,
+          "veg": true,
+          "category": "Breads"
+        },
+        {
+          "item_id": "rest_001_item_005",
+          "name": "Garlic Naan",
+          "price": 45,
+          "veg": true,
+          "category": "Breads"
+        },
+        {
+          "item_id": "rest_001_item_006",
+          "name": "Jeera Rice",
+          "price": 120,
+          "veg": true,
+          "category": "Rice"
+        },
+        {
+          "item_id": "rest_001_item_007",
+          "name": "Veg Biryani",
+          "price": 220,
+          "veg": true,
+          "category": "Rice"
+        },
+        {
+          "item_id": "rest_001_item_008",
+          "name": "Gulab Jamun",
+          "price": 90,
+          "veg": true,
+          "category": "Desserts"
+        },
+        {
+          "item_id": "rest_001_item_009",
+          "name": "Lassi",
+          "price": 80,
+          "veg": true,
+          "category": "Beverages"
+        },
+        {
+          "item_id": "rest_001_item_010",
+          "name": "Masala Papad",
+          "price": 70,
+          "veg": true,
+          "category": "Starters"
+        }
+      ],
+      "offers": ["50% off up to ₹100", "Free delivery"],
+      "is_active": true
+    },
+    {
+      "restaurant_id": "rest_002",
+      "name": "Delhi Dhaba",
+      "description": "Rustic North Indian flavours from the highway dhabas",
+      "cuisine": ["North Indian"],
+      "rating": 4.1,
+      "reviews_count": 980,
+      "delivery_time_mins": 35,
+      "cost_for_two": 350,
+      "location": {
+        "latitude": "12.9352",
+        "longitude": "77.6245",
+        "city": "Bangalore",
+        "area": "BTM Layout"
+      },
+      "image_url": "https://via.placeholder.com/400x300?text=Delhi+Dhaba",
+      "menu": [
+        {
+          "item_id": "rest_002_item_001",
+          "name": "Aloo Paratha",
+          "price": 90,
+          "veg": true,
+          "category": "Breads"
+        },
+        {
+          "item_id": "rest_002_item_002",
+          "name": "Chole Bhature",
+          "price": 160,
+          "veg": true,
+          "category": "Main Course"
+        },
+        {
+          "item_id": "rest_002_item_003",
+          "name": "Egg Bhurji",
+          "price": 130,
+          "veg": false,
+          "category": "Main Course"
+        },
+        {
+          "item_id": "rest_002_item_004",
+          "name": "Tandoori Chicken (Half)",
+          "price": 260,
+          "veg": false,
+          "category": "Starters"
+        },
+        {
+          "item_id": "rest_002_item_005",
+          "name": "Veg Thali",
+          "price": 220,
+          "veg": true,
+          "category": "Combos"
+        },
+        {
+          "item_id": "rest_002_item_006",
+          "name": "Non-Veg Thali",
+          "price": 260,
+          "veg": false,
+          "category": "Combos"
+        },
+        {
+          "item_id": "rest_002_item_007",
+          "name": "Plain Rice",
+          "price": 90,
+          "veg": true,
+          "category": "Rice"
+        },
+        {
+          "item_id": "rest_002_item_008",
+          "name": "Curd",
+          "price": 40,
+          "veg": true,
+          "category": "Sides"
+        },
+        {
+          "item_id": "rest_002_item_009",
+          "name": "Jalebi",
+          "price": 110,
+          "veg": true,
+          "category": "Desserts"
+        },
+        {
+          "item_id": "rest_002_item_010",
+          "name": "Sweet Lassi",
+          "price": 70,
+          "veg": true,
+          "category": "Beverages"
+        }
+      ],
+      "offers": ["30% off above ₹299"],
+      "is_active": true
+    },
+    {
+      "restaurant_id": "rest_003",
+      "name": "Royal Biryani House",
+      "description": "Biryani and kebabs with royal North Indian spices",
+      "cuisine": ["North Indian", "Biryani"],
+      "rating": 4.4,
+      "reviews_count": 2100,
+      "delivery_time_mins": 32,
+      "cost_for_two": 500,
+      "location": {
+        "latitude": "12.9920",
+        "longitude": "77.6952",
+        "city": "Bangalore",
+        "area": "Marathahalli"
+      },
+      "image_url": "https://via.placeholder.com/400x300?text=Royal+Biryani+House",
+      "menu": [
+        {
+          "item_id": "rest_003_item_001",
+          "name": "Chicken Biryani",
+          "price": 260,
+          "veg": false,
+          "category": "Rice"
+        },
+        {
+          "item_id": "rest_003_item_002",
+          "name": "Mutton Biryani",
+          "price": 320,
+          "veg": false,
+          "category": "Rice"
+        },
+        {
+          "item_id": "rest_003_item_003",
+          "name": "Veg Biryani",
+          "price": 230,
+          "veg": true,
+          "category": "Rice"
+        },
+        {
+          "item_id": "rest_003_item_004",
+          "name": "Chicken Tikka",
+          "price": 260,
+          "veg": false,
+          "category": "Starters"
+        },
+        {
+          "item_id": "rest_003_item_005",
+          "name": "Paneer Tikka",
+          "price": 220,
+          "veg": true,
+          "category": "Starters"
+        },
+        {
+          "item_id": "rest_003_item_006",
+          "name": "Raita",
+          "price": 60,
+          "veg": true,
+          "category": "Sides"
+        },
+        {
+          "item_id": "rest_003_item_007",
+          "name": "Gulab Jamun",
+          "price": 90,
+          "veg": true,
+          "category": "Desserts"
+        },
+        {
+          "item_id": "rest_003_item_008",
+          "name": "Tandoori Roti",
+          "price": 30,
+          "veg": true,
+          "category": "Breads"
+        },
+        {
+          "item_id": "rest_003_item_009",
+          "name": "Butter Naan",
+          "price": 45,
+          "veg": true,
+          "category": "Breads"
+        },
+        {
+          "item_id": "rest_003_item_010",
+          "name": "Soft Drink (500ml)",
+          "price": 60,
+          "veg": true,
+          "category": "Beverages"
+        }
+      ],
+      "offers": ["40% off up to ₹120"],
+      "is_active": true
+    },
+    {
+      "restaurant_id": "rest_004",
+      "name": "Tandoor Tales",
+      "description": "Tandoori specials and rich North Indian curries",
+      "cuisine": ["North Indian", "Tandoor"],
+      "rating": 4.0,
+      "reviews_count": 750,
+      "delivery_time_mins": 38,
+      "cost_for_two": 450,
+      "location": {
+        "latitude": "12.9141",
+        "longitude": "77.6387",
+        "city": "Bangalore",
+        "area": "HSR Layout"
+      },
+      "image_url": "https://via.placeholder.com/400x300?text=Tandoor+Tales",
+      "menu": [
+        {
+          "item_id": "rest_004_item_001",
+          "name": "Tandoori Chicken (Full)",
+          "price": 480,
+          "veg": false,
+          "category": "Starters"
+        },
+        {
+          "item_id": "rest_004_item_002",
+          "name": "Achari Paneer Tikka",
+          "price": 240,
+          "veg": true,
+          "category": "Starters"
+        },
+        {
+          "item_id": "rest_004_item_003",
+          "name": "Dal Tadka",
+          "price": 190,
+          "veg": true,
+          "category": "Main Course"
+        },
+        {
+          "item_id": "rest_004_item_004",
+          "name": "Kadhai Chicken",
+          "price": 280,
+          "veg": false,
+          "category": "Main Course"
+        },
+        {
+          "item_id": "rest_004_item_005",
+          "name": "Butter Naan",
+          "price": 45,
+          "veg": true,
+          "category": "Breads"
+        },
+        {
+          "item_id": "rest_004_item_006",
+          "name": "Garlic Naan",
+          "price": 55,
+          "veg": true,
+          "category": "Breads"
+        },
+        {
+          "item_id": "rest_004_item_007",
+          "name": "Veg Pulao",
+          "price": 200,
+          "veg": true,
+          "category": "Rice"
+        },
+        {
+          "item_id": "rest_004_item_008",
+          "name": "Jeera Rice",
+          "price": 150,
+          "veg": true,
+          "category": "Rice"
+        },
+        {
+          "item_id": "rest_004_item_009",
+          "name": "Masala Papad",
+          "price": 70,
+          "veg": true,
+          "category": "Starters"
+        },
+        {
+          "item_id": "rest_004_item_010",
+          "name": "Sweet Lassi",
+          "price": 80,
+          "veg": true,
+          "category": "Beverages"
+        }
+      ],
+      "offers": ["20% off above ₹399"],
+      "is_active": true
+    },
+    {
+      "restaurant_id": "rest_005",
+      "name": "Desi Handi",
+      "description": "Slow-cooked handi gravies and North Indian classics",
+      "cuisine": ["North Indian"],
+      "rating": 4.2,
+      "reviews_count": 640,
+      "delivery_time_mins": 33,
+      "cost_for_two": 380,
+      "location": {
+        "latitude": "12.9710",
+        "longitude": "77.6410",
+        "city": "Bangalore",
+        "area": "Indiranagar"
+      },
+      "image_url": "https://via.placeholder.com/400x300?text=Desi+Handi",
+      "menu": [
+        {
+          "item_id": "rest_005_item_001",
+          "name": "Handi Chicken Curry",
+          "price": 290,
+          "veg": false,
+          "category": "Main Course"
+        },
+        {
+          "item_id": "rest_005_item_002",
+          "name": "Handi Paneer",
+          "price": 260,
+          "veg": true,
+          "category": "Main Course"
+        },
+        {
+          "item_id": "rest_005_item_003",
+          "name": "Laccha Paratha",
+          "price": 40,
+          "veg": true,
+          "category": "Breads"
+        },
+        {
+          "item_id": "rest_005_item_004",
+          "name": "Tandoori Roti",
+          "price": 30,
+          "veg": true,
+          "category": "Breads"
+        },
+        {
+          "item_id": "rest_005_item_005",
+          "name": "Veg Pulao",
+          "price": 190,
+          "veg": true,
+          "category": "Rice"
+        },
+        {
+          "item_id": "rest_005_item_006",
+          "name": "Plain Rice",
+          "price": 100,
+          "veg": true,
+          "category": "Rice"
+        },
+        {
+          "item_id": "rest_005_item_007",
+          "name": "Boondi Raita",
+          "price": 70,
+          "veg": true,
+          "category": "Sides"
+        },
+        {
+          "item_id": "rest_005_item_008",
+          "name": "Salad",
+          "price": 60,
+          "veg": true,
+          "category": "Sides"
+        },
+        {
+          "item_id": "rest_005_item_009",
+          "name": "Rasmalai",
+          "price": 110,
+          "veg": true,
+          "category": "Desserts"
+        },
+        {
+          "item_id": "rest_005_item_010",
+          "name": "Buttermilk",
+          "price": 50,
+          "veg": true,
+          "category": "Beverages"
+        }
+      ],
+      "offers": ["15% off above ₹349"],
+      "is_active": true
+    },
+    {
+      "restaurant_id": "rest_006",
+      "name": "Udupi Upahar",
+      "description": "Traditional South Indian tiffin and meals",
+      "cuisine": ["South Indian"],
+      "rating": 4.5,
+      "reviews_count": 1850,
+      "delivery_time_mins": 25,
+      "cost_for_two": 250,
+      "location": {
+        "latitude": "12.9351",
+        "longitude": "77.6244",
+        "city": "Bangalore",
+        "area": "BTM Layout"
+      },
+      "image_url": "https://via.placeholder.com/400x300?text=Udupi+Upahar",
+      "menu": [
+        {
+          "item_id": "rest_006_item_001",
+          "name": "Masala Dosa",
+          "price": 90,
+          "veg": true,
+          "category": "Dosa"
+        },
+        {
+          "item_id": "rest_006_item_002",
+          "name": "Plain Dosa",
+          "price": 70,
+          "veg": true,
+          "category": "Dosa"
+        },
+        {
+          "item_id": "rest_006_item_003",
+          "name": "Idli (2 pcs)",
+          "price": 50,
+          "veg": true,
+          "category": "Tiffin"
+        },
+        {
+          "item_id": "rest_006_item_004",
+          "name": "Vada (2 pcs)",
+          "price": 60,
+          "veg": true,
+          "category": "Tiffin"
+        },
+        {
+          "item_id": "rest_006_item_005",
+          "name": "Mini Meals",
+          "price": 140,
+          "veg": true,
+          "category": "Meals"
+        },
+        {
+          "item_id": "rest_006_item_006",
+          "name": "Full Meals",
+          "price": 190,
+          "veg": true,
+          "category": "Meals"
+        },
+        {
+          "item_id": "rest_006_item_007",
+          "name": "Filter Coffee",
+          "price": 35,
+          "veg": true,
+          "category": "Beverages"
+        },
+        {
+          "item_id": "rest_006_item_008",
+          "name": "Badam Milk",
+          "price": 60,
+          "veg": true,
+          "category": "Beverages"
+        },
+        {
+          "item_id": "rest_006_item_009",
+          "name": "Kesari Bath",
+          "price": 70,
+          "veg": true,
+          "category": "Desserts"
+        },
+        {
+          "item_id": "rest_006_item_010",
+          "name": "Curd Rice",
+          "price": 90,
+          "veg": true,
+          "category": "Rice"
+        }
+      ],
+      "offers": ["₹50 off above ₹249"],
+      "is_active": true
+    },
+    {
+      "restaurant_id": "rest_007",
+      "name": "Andhra Spice",
+      "description": "Spicy Andhra-style meals and biryanis",
+      "cuisine": ["South Indian", "Andhra"],
+      "rating": 4.2,
+      "reviews_count": 1100,
+      "delivery_time_mins": 30,
+      "cost_for_two": 350,
+      "location": {
+        "latitude": "12.9711",
+        "longitude": "77.6412",
+        "city": "Bangalore",
+        "area": "Indiranagar"
+      },
+      "image_url": "https://via.placeholder.com/400x300?text=Andhra+Spice",
+      "menu": [
+        {
+          "item_id": "rest_007_item_001",
+          "name": "Andhra Veg Meals",
+          "price": 220,
+          "veg": true,
+          "category": "Meals"
+        },
+        {
+          "item_id": "rest_007_item_002",
+          "name": "Andhra Non-Veg Meals",
+          "price": 260,
+          "veg": false,
+          "category": "Meals"
+        },
+        {
+          "item_id": "rest_007_item_003",
+          "name": "Gongura Chicken",
+          "price": 280,
+          "veg": false,
+          "category": "Main Course"
+        },
+        {
+          "item_id": "rest_007_item_004",
+          "name": "Gongura Paneer",
+          "price": 250,
+          "veg": true,
+          "category": "Main Course"
+        },
+        {
+          "item_id": "rest_007_item_005",
+          "name": "Chicken Fry Piece Biryani",
+          "price": 290,
+          "veg": false,
+          "category": "Rice"
+        },
+        {
+          "item_id": "rest_007_item_006",
+          "name": "Veg Biryani",
+          "price": 230,
+          "veg": true,
+          "category": "Rice"
+        },
+        {
+          "item_id": "rest_007_item_007",
+          "name": "Curd Rice",
+          "price": 100,
+          "veg": true,
+          "category": "Rice"
+        },
+        {
+          "item_id": "rest_007_item_008",
+          "name": "Fryums",
+          "price": 60,
+          "veg": true,
+          "category": "Sides"
+        },
+        {
+          "item_id": "rest_007_item_009",
+          "name": "Ghee Rice",
+          "price": 170,
+          "veg": true,
+          "category": "Rice"
+        },
+        {
+          "item_id": "rest_007_item_010",
+          "name": "Buttermilk",
+          "price": 40,
+          "veg": true,
+          "category": "Beverages"
+        }
+      ],
+      "offers": ["20% off up to ₹80"],
+      "is_active": true
+    },
+    {
+      "restaurant_id": "rest_008",
+      "name": "Madras Cafe",
+      "description": "Classic Tamil-style breakfast and meals",
+      "cuisine": ["South Indian"],
+      "rating": 4.3,
+      "reviews_count": 900,
+      "delivery_time_mins": 28,
+      "cost_for_two": 220,
+      "location": {
+        "latitude": "12.9142",
+        "longitude": "77.6388",
+        "city": "Bangalore",
+        "area": "HSR Layout"
+      },
+      "image_url": "https://via.placeholder.com/400x300?text=Madras+Cafe",
+      "menu": [
+        {
+          "item_id": "rest_008_item_001",
+          "name": "Onion Rava Dosa",
+          "price": 100,
+          "veg": true,
+          "category": "Dosa"
+        },
+        {
+          "item_id": "rest_008_item_002",
+          "name": "Ghee Roast Dosa",
+          "price": 120,
+          "veg": true,
+          "category": "Dosa"
+        },
+        {
+          "item_id": "rest_008_item_003",
+          "name": "Idli Vada Combo",
+          "price": 80,
+          "veg": true,
+          "category": "Tiffin"
+        },
+        {
+          "item_id": "rest_008_item_004",
+          "name": "Pongal",
+          "price": 90,
+          "veg": true,
+          "category": "Tiffin"
+        },
+        {
+          "item_id": "rest_008_item_005",
+          "name": "Curd Rice",
+          "price": 90,
+          "veg": true,
+          "category": "Rice"
+        },
+        {
+          "item_id": "rest_008_item_006",
+          "name": "Mini Meals",
+          "price": 150,
+          "veg": true,
+          "category": "Meals"
+        },
+        {
+          "item_id": "rest_008_item_007",
+          "name": "Filter Coffee",
+          "price": 35,
+          "veg": true,
+          "category": "Beverages"
+        },
+        {
+          "item_id": "rest_008_item_008",
+          "name": "Lemon Rice",
+          "price": 85,
+          "veg": true,
+          "category": "Rice"
+        },
+        {
+          "item_id": "rest_008_item_009",
+          "name": "Kesari",
+          "price": 60,
+          "veg": true,
+          "category": "Desserts"
+        },
+        {
+          "item_id": "rest_008_item_010",
+          "name": "Butter Milk",
+          "price": 40,
+          "veg": true,
+          "category": "Beverages"
+        }
+      ],
+      "offers": ["₹30 off above ₹199"],
+      "is_active": true
+    },
+    {
+      "restaurant_id": "rest_009",
+      "name": "Kerala Mess",
+      "description": "Homely Kerala meals and seafood specials",
+      "cuisine": ["South Indian", "Kerala"],
+      "rating": 4.1,
+      "reviews_count": 780,
+      "delivery_time_mins": 32,
+      "cost_for_two": 320,
+      "location": {
+        "latitude": "12.9750",
+        "longitude": "77.6050",
+        "city": "Bangalore",
+        "area": "MG Road"
+      },
+      "image_url": "https://via.placeholder.com/400x300?text=Kerala+Mess",
+      "menu": [
+        {
+          "item_id": "rest_009_item_001",
+          "name": "Kerala Veg Meals",
+          "price": 230,
+          "veg": true,
+          "category": "Meals"
+        },
+        {
+          "item_id": "rest_009_item_002",
+          "name": "Kerala Fish Curry Meals",
+          "price": 280,
+          "veg": false,
+          "category": "Meals"
+        },
+        {
+          "item_id": "rest_009_item_003",
+          "name": "Appam with Stew",
+          "price": 180,
+          "veg": true,
+          "category": "Main Course"
+        },
+        {
+          "item_id": "rest_009_item_004",
+          "name": "Puttu Kadala",
+          "price": 150,
+          "veg": true,
+          "category": "Main Course"
+        },
+        {
+          "item_id": "rest_009_item_005",
+          "name": "Chicken Roast",
+          "price": 260,
+          "veg": false,
+          "category": "Main Course"
+        },
+        {
+          "item_id": "rest_009_item_006",
+          "name": "Parotta",
+          "price": 40,
+          "veg": true,
+          "category": "Breads"
+        },
+        {
+          "item_id": "rest_009_item_007",
+          "name": "Egg Roast",
+          "price": 130,
+          "veg": false,
+          "category": "Main Course"
+        },
+        {
+          "item_id": "rest_009_item_008",
+          "name": "Payasam",
+          "price": 90,
+          "veg": true,
+          "category": "Desserts"
+        },
+        {
+          "item_id": "rest_009_item_009",
+          "name": "Lemon Juice",
+          "price": 40,
+          "veg": true,
+          "category": "Beverages"
+        },
+        {
+          "item_id": "rest_009_item_010",
+          "name": "Butter Milk",
+          "price": 35,
+          "veg": true,
+          "category": "Beverages"
+        }
+      ],
+      "offers": ["Free dessert on meals"],
+      "is_active": true
+    },
+    {
+      "restaurant_id": "rest_010",
+      "name": "Idli Kada",
+      "description": "Quick South Indian snacks and tiffin",
+      "cuisine": ["South Indian"],
+      "rating": 4.0,
+      "reviews_count": 650,
+      "delivery_time_mins": 22,
+      "cost_for_two": 180,
+      "location": {
+        "latitude": "12.9400",
+        "longitude": "77.6200",
+        "city": "Bangalore",
+        "area": "JP Nagar"
+      },
+      "image_url": "https://via.placeholder.com/400x300?text=Idli+Kada",
+      "menu": [
+        {
+          "item_id": "rest_010_item_001",
+          "name": "Idli (3 pcs)",
+          "price": 60,
+          "veg": true,
+          "category": "Tiffin"
+        },
+        {
+          "item_id": "rest_010_item_002",
+          "name": "Medu Vada (2 pcs)",
+          "price": 70,
+          "veg": true,
+          "category": "Tiffin"
+        },
+        {
+          "item_id": "rest_010_item_003",
+          "name": "Masala Dosa",
+          "price": 90,
+          "veg": true,
+          "category": "Dosa"
+        },
+        {
+          "item_id": "rest_010_item_004",
+          "name": "Plain Dosa",
+          "price": 70,
+          "veg": true,
+          "category": "Dosa"
+        },
+        {
+          "item_id": "rest_010_item_005",
+          "name": "Upma",
+          "price": 70,
+          "veg": true,
+          "category": "Tiffin"
+        },
+        {
+          "item_id": "rest_010_item_006",
+          "name": "Poori Sagu",
+          "price": 90,
+          "veg": true,
+          "category": "Tiffin"
+        },
+        {
+          "item_id": "rest_010_item_007",
+          "name": "Kesari Bath",
+          "price": 60,
+          "veg": true,
+          "category": "Desserts"
+        },
+        {
+          "item_id": "rest_010_item_008",
+          "name": "Filter Coffee",
+          "price": 30,
+          "veg": true,
+          "category": "Beverages"
+        },
+        {
+          "item_id": "rest_010_item_009",
+          "name": "Tea",
+          "price": 25,
+          "veg": true,
+          "category": "Beverages"
+        },
+        {
+          "item_id": "rest_010_item_010",
+          "name": "Buttermilk",
+          "price": 30,
+          "veg": true,
+          "category": "Beverages"
+        }
+      ],
+      "offers": ["₹20 off above ₹149"],
+      "is_active": true
+    },
+    {
+      "restaurant_id": "rest_011",
+      "name": "Dragon Wok",
+      "description": "Street-style Chinese noodles and gravies",
+      "cuisine": ["Chinese"],
+      "rating": 4.1,
+      "reviews_count": 1400,
+      "delivery_time_mins": 30,
+      "cost_for_two": 320,
+      "location": {
+        "latitude": "12.9716",
+        "longitude": "77.5946",
+        "city": "Bangalore",
+        "area": "Koramangala"
+      },
+      "image_url": "https://via.placeholder.com/400x300?text=Dragon+Wok",
+      "menu": [
+        {
+          "item_id": "rest_011_item_001",
+          "name": "Veg Hakka Noodles",
+          "price": 180,
+          "veg": true,
+          "category": "Noodles"
+        },
+        {
+          "item_id": "rest_011_item_002",
+          "name": "Chicken Hakka Noodles",
+          "price": 210,
+          "veg": false,
+          "category": "Noodles"
+        },
+        {
+          "item_id": "rest_011_item_003",
+          "name": "Veg Fried Rice",
+          "price": 170,
+          "veg": true,
+          "category": "Rice"
+        },
+        {
+          "item_id": "rest_011_item_004",
+          "name": "Chicken Fried Rice",
+          "price": 200,
+          "veg": false,
+          "category": "Rice"
+        },
+        {
+          "item_id": "rest_011_item_005",
+          "name": "Veg Manchurian Gravy",
+          "price": 190,
+          "veg": true,
+          "category": "Main Course"
+        },
+        {
+          "item_id": "rest_011_item_006",
+          "name": "Chicken Manchurian Gravy",
+          "price": 220,
+          "veg": false,
+          "category": "Main Course"
+        },
+        {
+          "item_id": "rest_011_item_007",
+          "name": "Spring Rolls",
+          "price": 160,
+          "veg": true,
+          "category": "Starters"
+        },
+        {
+          "item_id": "rest_011_item_008",
+          "name": "Chilli Paneer Dry",
+          "price": 210,
+          "veg": true,
+          "category": "Starters"
+        },
+        {
+          "item_id": "rest_011_item_009",
+          "name": "Chilli Chicken Dry",
+          "price": 230,
+          "veg": false,
+          "category": "Starters"
+        },
+        {
+          "item_id": "rest_011_item_010",
+          "name": "Cold Drink (500ml)",
+          "price": 60,
+          "veg": true,
+          "category": "Beverages"
+        }
+      ],
+      "offers": ["40% off up to ₹100"],
+      "is_active": true
+    },
+    {
+      "restaurant_id": "rest_012",
+      "name": "Wok Express",
+      "description": "Customizable Chinese wok boxes and combos",
+      "cuisine": ["Chinese"],
+      "rating": 4.0,
+      "reviews_count": 950,
+      "delivery_time_mins": 27,
+      "cost_for_two": 300,
+      "location": {
+        "latitude": "12.9352",
+        "longitude": "77.6245",
+        "city": "Bangalore",
+        "area": "BTM Layout"
+      },
+      "image_url": "https://via.placeholder.com/400x300?text=Wok+Express",
+      "menu": [
+        {
+          "item_id": "rest_012_item_001",
+          "name": "Veg Wok Box",
+          "price": 220,
+          "veg": true,
+          "category": "Combos"
+        },
+        {
+          "item_id": "rest_012_item_002",
+          "name": "Chicken Wok Box",
+          "price": 240,
+          "veg": false,
+          "category": "Combos"
+        },
+        {
+          "item_id": "rest_012_item_003",
+          "name": "Paneer Wok Box",
+          "price": 230,
+          "veg": true,
+          "category": "Combos"
+        },
+        {
+          "item_id": "rest_012_item_004",
+          "name": "Chilli Garlic Noodles",
+          "price": 190,
+          "veg": true,
+          "category": "Noodles"
+        },
+        {
+          "item_id": "rest_012_item_005",
+          "name": "Schezwan Fried Rice",
+          "price": 190,
+          "veg": true,
+          "category": "Rice"
+        },
+        {
+          "item_id": "rest_012_item_006",
+          "name": "Veg Spring Rolls",
+          "price": 160,
+          "veg": true,
+          "category": "Starters"
+        },
+        {
+          "item_id": "rest_012_item_007",
+          "name": "Honey Chilli Potatoes",
+          "price": 200,
+          "veg": true,
+          "category": "Starters"
+        },
+        {
+          "item_id": "rest_012_item_008",
+          "name": "Chilli Chicken Dry",
+          "price": 230,
+          "veg": false,
+          "category": "Starters"
+        },
+        {
+          "item_id": "rest_012_item_009",
+          "name": "Soft Drink (500ml)",
+          "price": 60,
+          "veg": true,
+          "category": "Beverages"
+        },
+        {
+          "item_id": "rest_012_item_010",
+          "name": "Brownie",
+          "price": 120,
+          "veg": true,
+          "category": "Desserts"
+        }
+      ],
+      "offers": ["Buy 1 Get 1 on Wok Boxes"],
+      "is_active": true
+    },
+    {
+      "restaurant_id": "rest_013",
+      "name": "Hunan House",
+      "description": "Spicy Hunan-style Chinese specialties",
+      "cuisine": ["Chinese"],
+      "rating": 4.2,
+      "reviews_count": 820,
+      "delivery_time_mins": 34,
+      "cost_for_two": 340,
+      "location": {
+        "latitude": "12.9710",
+        "longitude": "77.6410",
+        "city": "Bangalore",
+        "area": "Indiranagar"
+      },
+      "image_url": "https://via.placeholder.com/400x300?text=Hunan+House",
+      "menu": [
+        {
+          "item_id": "rest_013_item_001",
+          "name": "Hunan Veg Noodles",
+          "price": 200,
+          "veg": true,
+          "category": "Noodles"
+        },
+        {
+          "item_id": "rest_013_item_002",
+          "name": "Hunan Chicken Noodles",
+          "price": 230,
+          "veg": false,
+          "category": "Noodles"
+        },
+        {
+          "item_id": "rest_013_item_003",
+          "name": "Hunan Veg Rice",
+          "price": 210,
+          "veg": true,
+          "category": "Rice"
+        },
+        {
+          "item_id": "rest_013_item_004",
+          "name": "Hunan Chicken Rice",
+          "price": 240,
+          "veg": false,
+          "category": "Rice"
+        },
+        {
+          "item_id": "rest_013_item_005",
+          "name": "Hot & Sour Soup (Veg)",
+          "price": 130,
+          "veg": true,
+          "category": "Soup"
+        },
+        {
+          "item_id": "rest_013_item_006",
+          "name": "Hot & Sour Soup (Chicken)",
+          "price": 150,
+          "veg": false,
+          "category": "Soup"
+        },
+        {
+          "item_id": "rest_013_item_007",
+          "name": "Veg Momos (Steamed)",
+          "price": 140,
+          "veg": true,
+          "category": "Starters"
+        },
+        {
+          "item_id": "rest_013_item_008",
+          "name": "Chicken Momos (Steamed)",
+          "price": 160,
+          "veg": false,
+          "category": "Starters"
+        },
+        {
+          "item_id": "rest_013_item_009",
+          "name": "Veg Crispy",
+          "price": 190,
+          "veg": true,
+          "category": "Starters"
+        },
+        {
+          "item_id": "rest_013_item_010",
+          "name": "Soft Drink (330ml)",
+          "price": 50,
+          "veg": true,
+          "category": "Beverages"
+        }
+      ],
+      "offers": ["25% off up to ₹90"],
+      "is_active": true
+    },
+    {
+      "restaurant_id": "rest_014",
+      "name": "Wonton Corner",
+      "description": "Dimsums, baos and pan-Asian Chinese",
+      "cuisine": ["Chinese"],
+      "rating": 4.0,
+      "reviews_count": 600,
+      "delivery_time_mins": 29,
+      "cost_for_two": 360,
+      "location": {
+        "latitude": "12.9141",
+        "longitude": "77.6387",
+        "city": "Bangalore",
+        "area": "HSR Layout"
+      },
+      "image_url": "https://via.placeholder.com/400x300?text=Wonton+Corner",
+      "menu": [
+        {
+          "item_id": "rest_014_item_001",
+          "name": "Veg Wontons (Fried)",
+          "price": 170,
+          "veg": true,
+          "category": "Starters"
+        },
+        {
+          "item_id": "rest_014_item_002",
+          "name": "Chicken Wontons (Fried)",
+          "price": 190,
+          "veg": false,
+          "category": "Starters"
+        },
+        {
+          "item_id": "rest_014_item_003",
+          "name": "Veg Bao",
+          "price": 160,
+          "veg": true,
+          "category": "Starters"
+        },
+        {
+          "item_id": "rest_014_item_004",
+          "name": "Chicken Bao",
+          "price": 190,
+          "veg": false,
+          "category": "Starters"
+        },
+        {
+          "item_id": "rest_014_item_005",
+          "name": "Veg Noodles",
+          "price": 190,
+          "veg": true,
+          "category": "Noodles"
+        },
+        {
+          "item_id": "rest_014_item_006",
+          "name": "Chicken Noodles",
+          "price": 220,
+          "veg": false,
+          "category": "Noodles"
+        },
+        {
+          "item_id": "rest_014_item_007",
+          "name": "Veg Fried Rice",
+          "price": 190,
+          "veg": true,
+          "category": "Rice"
+        },
+        {
+          "item_id": "rest_014_item_008",
+          "name": "Chicken Fried Rice",
+          "price": 220,
+          "veg": false,
+          "category": "Rice"
+        },
+        {
+          "item_id": "rest_014_item_009",
+          "name": "Spring Rolls",
+          "price": 160,
+          "veg": true,
+          "category": "Starters"
+        },
+        {
+          "item_id": "rest_014_item_010",
+          "name": "Soft Drink (500ml)",
+          "price": 60,
+          "veg": true,
+          "category": "Beverages"
+        }
+      ],
+      "offers": ["Combo meals from ₹199"],
+      "is_active": true
+    },
+    {
+      "restaurant_id": "rest_015",
+      "name": "La Pizzeria",
+      "description": "Hand-tossed Italian pizzas and garlic bread",
+      "cuisine": ["Italian", "Pizza"],
+      "rating": 4.3,
+      "reviews_count": 1300,
+      "delivery_time_mins": 35,
+      "cost_for_two": 550,
+      "location": {
+        "latitude": "12.9716",
+        "longitude": "77.5946",
+        "city": "Bangalore",
+        "area": "Koramangala"
+      },
+      "image_url": "https://via.placeholder.com/400x300?text=La+Pizzeria",
+      "menu": [
+        {
+          "item_id": "rest_015_item_001",
+          "name": "Margherita Pizza (Medium)",
+          "price": 320,
+          "veg": true,
+          "category": "Pizza"
+        },
+        {
+          "item_id": "rest_015_item_002",
+          "name": "Farmhouse Pizza (Medium)",
+          "price": 420,
+          "veg": true,
+          "category": "Pizza"
+        },
+        {
+          "item_id": "rest_015_item_003",
+          "name": "Chicken Supreme Pizza (Medium)",
+          "price": 460,
+          "veg": false,
+          "category": "Pizza"
+        },
+        {
+          "item_id": "rest_015_item_004",
+          "name": "Garlic Breadsticks",
+          "price": 170,
+          "veg": true,
+          "category": "Starters"
+        },
+        {
+          "item_id": "rest_015_item_005",
+          "name": "Cheesy Garlic Bread",
+          "price": 200,
+          "veg": true,
+          "category": "Starters"
+        },
+        {
+          "item_id": "rest_015_item_006",
+          "name": "Veg Pasta Alfredo",
+          "price": 280,
+          "veg": true,
+          "category": "Pasta"
+        },
+        {
+          "item_id": "rest_015_item_007",
+          "name": "Chicken Pasta Arrabbiata",
+          "price": 320,
+          "veg": false,
+          "category": "Pasta"
+        },
+        {
+          "item_id": "rest_015_item_008",
+          "name": "Choco Lava Cake",
+          "price": 130,
+          "veg": true,
+          "category": "Desserts"
+        },
+        {
+          "item_id": "rest_015_item_009",
+          "name": "Soft Drink (330ml)",
+          "price": 60,
+          "veg": true,
+          "category": "Beverages"
+        },
+        {
+          "item_id": "rest_015_item_010",
+          "name": "Garlic Dip",
+          "price": 40,
+          "veg": true,
+          "category": "Sides"
+        }
+      ],
+      "offers": ["50% off on second pizza"],
+      "is_active": true
+    },
+    {
+      "restaurant_id": "rest_016",
+      "name": "Trattoria Roma",
+      "description": "Authentic Italian pastas and wood-fired pizzas",
+      "cuisine": ["Italian"],
+      "rating": 4.4,
+      "reviews_count": 900,
+      "delivery_time_mins": 40,
+      "cost_for_two": 650,
+      "location": {
+        "latitude": "28.6139",
+        "longitude": "77.2090",
+        "city": "Delhi",
+        "area": "Connaught Place"
+      },
+      "image_url": "https://via.placeholder.com/400x300?text=Trattoria+Roma",
+      "menu": [
+        {
+          "item_id": "rest_016_item_001",
+          "name": "Spaghetti Aglio e Olio",
+          "price": 380,
+          "veg": true,
+          "category": "Pasta"
+        },
+        {
+          "item_id": "rest_016_item_002",
+          "name": "Penne Arrabbiata",
+          "price": 400,
+          "veg": true,
+          "category": "Pasta"
+        },
+        {
+          "item_id": "rest_016_item_003",
+          "name": "Chicken Lasagna",
+          "price": 460,
+          "veg": false,
+          "category": "Pasta"
+        },
+        {
+          "item_id": "rest_016_item_004",
+          "name": "Margherita Pizza (Thin Crust)",
+          "price": 420,
+          "veg": true,
+          "category": "Pizza"
+        },
+        {
+          "item_id": "rest_016_item_005",
+          "name": "Pepperoni Pizza",
+          "price": 520,
+          "veg": false,
+          "category": "Pizza"
+        },
+        {
+          "item_id": "rest_016_item_006",
+          "name": "Bruschetta",
+          "price": 260,
+          "veg": true,
+          "category": "Starters"
+        },
+        {
+          "item_id": "rest_016_item_007",
+          "name": "Tiramisu",
+          "price": 260,
+          "veg": true,
+          "category": "Desserts"
+        },
+        {
+          "item_id": "rest_016_item_008",
+          "name": "Panna Cotta",
+          "price": 240,
+          "veg": true,
+          "category": "Desserts"
+        },
+        {
+          "item_id": "rest_016_item_009",
+          "name": "Red Wine (Glass)",
+          "price": 350,
+          "veg": true,
+          "category": "Beverages"
+        },
+        {
+          "item_id": "rest_016_item_010",
+          "name": "Sparkling Water",
+          "price": 120,
+          "veg": true,
+          "category": "Beverages"
+        }
+      ],
+      "offers": ["Complimentary dessert on orders above ₹999"],
+      "is_active": true
+    },
+    {
+      "restaurant_id": "rest_017",
+      "name": "Pasta Punto",
+      "description": "Build-your-own pasta bowls and Italian sides",
+      "cuisine": ["Italian"],
+      "rating": 4.0,
+      "reviews_count": 620,
+      "delivery_time_mins": 33,
+      "cost_for_two": 500,
+      "location": {
+        "latitude": "19.0760",
+        "longitude": "72.8777",
+        "city": "Mumbai",
+        "area": "Bandra"
+      },
+      "image_url": "https://via.placeholder.com/400x300?text=Pasta+Punto",
+      "menu": [
+        {
+          "item_id": "rest_017_item_001",
+          "name": "Create Your Own Veg Pasta",
+          "price": 360,
+          "veg": true,
+          "category": "Pasta"
+        },
+        {
+          "item_id": "rest_017_item_002",
+          "name": "Create Your Own Chicken Pasta",
+          "price": 390,
+          "veg": false,
+          "category": "Pasta"
+        },
+        {
+          "item_id": "rest_017_item_003",
+          "name": "Garlic Bread",
+          "price": 160,
+          "veg": true,
+          "category": "Starters"
+        },
+        {
+          "item_id": "rest_017_item_004",
+          "name": "Cheesy Fries",
+          "price": 190,
+          "veg": true,
+          "category": "Starters"
+        },
+        {
+          "item_id": "rest_017_item_005",
+          "name": "Tomato Soup",
+          "price": 150,
+          "veg": true,
+          "category": "Soup"
+        },
+        {
+          "item_id": "rest_017_item_006",
+          "name": "Chocolate Brownie",
+          "price": 150,
+          "veg": true,
+          "category": "Desserts"
+        },
+        {
+          "item_id": "rest_017_item_007",
+          "name": "Soft Drink (330ml)",
+          "price": 60,
+          "veg": true,
+          "category": "Beverages"
+        },
+        {
+          "item_id": "rest_017_item_008",
+          "name": "Lemon Iced Tea",
+          "price": 120,
+          "veg": true,
+          "category": "Beverages"
+        },
+        {
+          "item_id": "rest_017_item_009",
+          "name": "Garlic Dip",
+          "price": 40,
+          "veg": true,
+          "category": "Sides"
+        },
+        {
+          "item_id": "rest_017_item_010",
+          "name": "Herb Breadsticks",
+          "price": 130,
+          "veg": true,
+          "category": "Starters"
+        }
+      ],
+      "offers": ["Flat ₹100 off above ₹599"],
+      "is_active": true
+    },
+    {
+      "restaurant_id": "rest_018",
+      "name": "Burger Hub",
+      "description": "Loaded burgers, fries and shakes",
+      "cuisine": ["Fast Food", "American"],
+      "rating": 4.1,
+      "reviews_count": 1500,
+      "delivery_time_mins": 28,
+      "cost_for_two": 350,
+      "location": {
+        "latitude": "12.9716",
+        "longitude": "77.5946",
+        "city": "Bangalore",
+        "area": "Koramangala"
+      },
+      "image_url": "https://via.placeholder.com/400x300?text=Burger+Hub",
+      "menu": [
+        {
+          "item_id": "rest_018_item_001",
+          "name": "Veg Burger",
+          "price": 140,
+          "veg": true,
+          "category": "Burgers"
+        },
+        {
+          "item_id": "rest_018_item_002",
+          "name": "Chicken Burger",
+          "price": 160,
+          "veg": false,
+          "category": "Burgers"
+        },
+        {
+          "item_id": "rest_018_item_003",
+          "name": "Double Cheese Burger",
+          "price": 190,
+          "veg": true,
+          "category": "Burgers"
+        },
+        {
+          "item_id": "rest_018_item_004",
+          "name": "French Fries",
+          "price": 110,
+          "veg": true,
+          "category": "Sides"
+        },
+        {
+          "item_id": "rest_018_item_005",
+          "name": "Peri Peri Fries",
+          "price": 130,
+          "veg": true,
+          "category": "Sides"
+        },
+        {
+          "item_id": "rest_018_item_006",
+          "name": "Onion Rings",
+          "price": 140,
+          "veg": true,
+          "category": "Sides"
+        },
+        {
+          "item_id": "rest_018_item_007",
+          "name": "Chocolate Shake",
+          "price": 160,
+          "veg": true,
+          "category": "Beverages"
+        },
+        {
+          "item_id": "rest_018_item_008",
+          "name": "Strawberry Shake",
+          "price": 160,
+          "veg": true,
+          "category": "Beverages"
+        },
+        {
+          "item_id": "rest_018_item_009",
+          "name": "Soft Drink (330ml)",
+          "price": 60,
+          "veg": true,
+          "category": "Beverages"
+        },
+        {
+          "item_id": "rest_018_item_010",
+          "name": "Brownie",
+          "price": 130,
+          "veg": true,
+          "category": "Desserts"
+        }
+      ],
+      "offers": ["Burger combo from ₹199"],
+      "is_active": true
+    },
+    {
+      "restaurant_id": "rest_019",
+      "name": "Fry Day",
+      "description": "Crispy fried chicken, burgers and wraps",
+      "cuisine": ["Fast Food"],
+      "rating": 4.0,
+      "reviews_count": 980,
+      "delivery_time_mins": 27,
+      "cost_for_two": 320,
+      "location": {
+        "latitude": "28.7041",
+        "longitude": "77.1025",
+        "city": "Delhi",
+        "area": "Rajouri Garden"
+      },
+      "image_url": "https://via.placeholder.com/400x300?text=Fry+Day",
+      "menu": [
+        {
+          "item_id": "rest_019_item_001",
+          "name": "Fried Chicken (4 pcs)",
+          "price": 260,
+          "veg": false,
+          "category": "Starters"
+        },
+        {
+          "item_id": "rest_019_item_002",
+          "name": "Chicken Zinger Burger",
+          "price": 190,
+          "veg": false,
+          "category": "Burgers"
+        },
+        {
+          "item_id": "rest_019_item_003",
+          "name": "Veg Burger",
+          "price": 150,
+          "veg": true,
+          "category": "Burgers"
+        },
+        {
+          "item_id": "rest_019_item_004",
+          "name": "Paneer Wrap",
+          "price": 180,
+          "veg": true,
+          "category": "Wraps"
+        },
+        {
+          "item_id": "rest_019_item_005",
+          "name": "Chicken Wrap",
+          "price": 200,
+          "veg": false,
+          "category": "Wraps"
+        },
+        {
+          "item_id": "rest_019_item_006",
+          "name": "French Fries",
+          "price": 110,
+          "veg": true,
+          "category": "Sides"
+        },
+        {
+          "item_id": "rest_019_item_007",
+          "name": "Peri Peri Fries",
+          "price": 130,
+          "veg": true,
+          "category": "Sides"
+        },
+        {
+          "item_id": "rest_019_item_008",
+          "name": "Soft Drink (330ml)",
+          "price": 60,
+          "veg": true,
+          "category": "Beverages"
+        },
+        {
+          "item_id": "rest_019_item_009",
+          "name": "Chocolate Shake",
+          "price": 150,
+          "veg": true,
+          "category": "Beverages"
+        },
+        {
+          "item_id": "rest_019_item_010",
+          "name": "Brownie Sundae",
+          "price": 180,
+          "veg": true,
+          "category": "Desserts"
+        }
+      ],
+      "offers": ["20% off on combos"],
+      "is_active": true
+    },
+    {
+      "restaurant_id": "rest_020",
+      "name": "Quick Bites",
+      "description": "Sandwiches, burgers and all-day snacks",
+      "cuisine": ["Fast Food"],
+      "rating": 3.9,
+      "reviews_count": 540,
+      "delivery_time_mins": 24,
+      "cost_for_two": 250,
+      "location": {
+        "latitude": "19.0760",
+        "longitude": "72.8777",
+        "city": "Mumbai",
+        "area": "Andheri"
+      },
+      "image_url": "https://via.placeholder.com/400x300?text=Quick+Bites",
+      "menu": [
+        {
+          "item_id": "rest_020_item_001",
+          "name": "Veg Sandwich",
+          "price": 120,
+          "veg": true,
+          "category": "Sandwiches"
+        },
+        {
+          "item_id": "rest_020_item_002",
+          "name": "Grilled Cheese Sandwich",
+          "price": 150,
+          "veg": true,
+          "category": "Sandwiches"
+        },
+        {
+          "item_id": "rest_020_item_003",
+          "name": "Paneer Burger",
+          "price": 160,
+          "veg": true,
+          "category": "Burgers"
+        },
+        {
+          "item_id": "rest_020_item_004",
+          "name": "Chicken Burger",
+          "price": 180,
+          "veg": false,
+          "category": "Burgers"
+        },
+        {
+          "item_id": "rest_020_item_005",
+          "name": "French Fries",
+          "price": 100,
+          "veg": true,
+          "category": "Sides"
+        },
+        {
+          "item_id": "rest_020_item_006",
+          "name": "Cheese Fries",
+          "price": 130,
+          "veg": true,
+          "category": "Sides"
+        },
+        {
+          "item_id": "rest_020_item_007",
+          "name": "Cold Coffee",
+          "price": 150,
+          "veg": true,
+          "category": "Beverages"
+        },
+        {
+          "item_id": "rest_020_item_008",
+          "name": "Chocolate Shake",
+          "price": 160,
+          "veg": true,
+          "category": "Beverages"
+        },
+        {
+          "item_id": "rest_020_item_009",
+          "name": "Brownie",
+          "price": 120,
+          "veg": true,
+          "category": "Desserts"
+        },
+        {
+          "item_id": "rest_020_item_010",
+          "name": "Soft Drink (330ml)",
+          "price": 60,
+          "veg": true,
+          "category": "Beverages"
+        }
+      ],
+      "offers": ["₹50 off above ₹249"],
+      "is_active": true
+    },
+    {
+      "restaurant_id": "rest_021",
+      "name": "Sweet Tooth",
+      "description": "Cakes, pastries and desserts for every occasion",
+      "cuisine": ["Desserts"],
+      "rating": 4.4,
+      "reviews_count": 1700,
+      "delivery_time_mins": 29,
+      "cost_for_two": 450,
+      "location": {
+        "latitude": "12.9716",
+        "longitude": "77.5946",
+        "city": "Bangalore",
+        "area": "Koramangala"
+      },
+      "image_url": "https://via.placeholder.com/400x300?text=Sweet+Tooth",
+      "menu": [
+        {
+          "item_id": "rest_021_item_001",
+          "name": "Chocolate Truffle Cake (1/2 kg)",
+          "price": 550,
+          "veg": true,
+          "category": "Cakes"
+        },
+        {
+          "item_id": "rest_021_item_002",
+          "name": "Red Velvet Cake (1/2 kg)",
+          "price": 600,
+          "veg": true,
+          "category": "Cakes"
+        },
+        {
+          "item_id": "rest_021_item_003",
+          "name": "Chocolate Brownie",
+          "price": 140,
+          "veg": true,
+          "category": "Brownies"
+        },
+        {
+          "item_id": "rest_021_item_004",
+          "name": "Choco Lava Cake",
+          "price": 130,
+          "veg": true,
+          "category": "Cakes"
+        },
+        {
+          "item_id": "rest_021_item_005",
+          "name": "Blueberry Cheesecake Slice",
+          "price": 180,
+          "veg": true,
+          "category": "Pastries"
+        },
+        {
+          "item_id": "rest_021_item_006",
+          "name": "Chocolate Mousse",
+          "price": 160,
+          "veg": true,
+          "category": "Desserts"
+        },
+        {
+          "item_id": "rest_021_item_007",
+          "name": "Jar Cake (Oreo)",
+          "price": 190,
+          "veg": true,
+          "category": "Desserts"
+        },
+        {
+          "item_id": "rest_021_item_008",
+          "name": "Cupcake (Chocolate)",
+          "price": 80,
+          "veg": true,
+          "category": "Desserts"
+        },
+        {
+          "item_id": "rest_021_item_009",
+          "name": "Choco Chip Cookie (Pack of 4)",
+          "price": 140,
+          "veg": true,
+          "category": "Desserts"
+        },
+        {
+          "item_id": "rest_021_item_010",
+          "name": "Cold Coffee",
+          "price": 150,
+          "veg": true,
+          "category": "Beverages"
+        }
+      ],
+      "offers": ["Free candle on cakes", "10% off above ₹799"],
+      "is_active": true
+    },
+    {
+      "restaurant_id": "rest_022",
+      "name": "Kulfi Nation",
+      "description": "Traditional kulfis and innovative frozen desserts",
+      "cuisine": ["Desserts"],
+      "rating": 4.2,
+      "reviews_count": 640,
+      "delivery_time_mins": 26,
+      "cost_for_two": 250,
+      "location": {
+        "latitude": "28.7041",
+        "longitude": "77.1025",
+        "city": "Delhi",
+        "area": "Lajpat Nagar"
+      },
+      "image_url": "https://via.placeholder.com/400x300?text=Kulfi+Nation",
+      "menu": [
+        {
+          "item_id": "rest_022_item_001",
+          "name": "Malai Kulfi Stick",
+          "price": 90,
+          "veg": true,
+          "category": "Kulfi"
+        },
+        {
+          "item_id": "rest_022_item_002",
+          "name": "Kesar Pista Kulfi Stick",
+          "price": 110,
+          "veg": true,
+          "category": "Kulfi"
+        },
+        {
+          "item_id": "rest_022_item_003",
+          "name": "Matka Kulfi",
+          "price": 160,
+          "veg": true,
+          "category": "Kulfi"
+        },
+        {
+          "item_id": "rest_022_item_004",
+          "name": "Chocolate Kulfi Stick",
+          "price": 110,
+          "veg": true,
+          "category": "Kulfi"
+        },
+        {
+          "item_id": "rest_022_item_005",
+          "name": "Falooda Kulfi",
+          "price": 180,
+          "veg": true,
+          "category": "Desserts"
+        },
+        {
+          "item_id": "rest_022_item_006",
+          "name": "Rabri Falooda",
+          "price": 200,
+          "veg": true,
+          "category": "Desserts"
+        },
+        {
+          "item_id": "rest_022_item_007",
+          "name": "Mango Kulfi Stick",
+          "price": 110,
+          "veg": true,
+          "category": "Kulfi"
+        },
+        {
+          "item_id": "rest_022_item_008",
+          "name": "Rose Milk",
+          "price": 90,
+          "veg": true,
+          "category": "Beverages"
+        },
+        {
+          "item_id": "rest_022_item_009",
+          "name": "Thandai",
+          "price": 120,
+          "veg": true,
+          "category": "Beverages"
+        },
+        {
+          "item_id": "rest_022_item_010",
+          "name": "Butterscotch Kulfi Stick",
+          "price": 110,
+          "veg": true,
+          "category": "Kulfi"
+        }
+      ],
+      "offers": ["₹30 off above ₹199"],
+      "is_active": true
+    },
+    {
+      "restaurant_id": "rest_023",
+      "name": "Juice Junction",
+      "description": "Fresh fruit juices, shakes and smoothies",
+      "cuisine": ["Beverages"],
+      "rating": 4.1,
+      "reviews_count": 890,
+      "delivery_time_mins": 20,
+      "cost_for_two": 200,
+      "location": {
+        "latitude": "12.9716",
+        "longitude": "77.5946",
+        "city": "Bangalore",
+        "area": "MG Road"
+      },
+      "image_url": "https://via.placeholder.com/400x300?text=Juice+Junction",
+      "menu": [
+        {
+          "item_id": "rest_023_item_001",
+          "name": "Orange Juice",
+          "price": 90,
+          "veg": true,
+          "category": "Juices"
+        },
+        {
+          "item_id": "rest_023_item_002",
+          "name": "Watermelon Juice",
+          "price": 80,
+          "veg": true,
+          "category": "Juices"
+        },
+        {
+          "item_id": "rest_023_item_003",
+          "name": "Pineapple Juice",
+          "price": 90,
+          "veg": true,
+          "category": "Juices"
+        },
+        {
+          "item_id": "rest_023_item_004",
+          "name": "Mango Shake",
+          "price": 130,
+          "veg": true,
+          "category": "Shakes"
+        },
+        {
+          "item_id": "rest_023_item_005",
+          "name": "Chocolate Shake",
+          "price": 130,
+          "veg": true,
+          "category": "Shakes"
+        },
+        {
+          "item_id": "rest_023_item_006",
+          "name": "Banana Smoothie",
+          "price": 130,
+          "veg": true,
+          "category": "Smoothies"
+        },
+        {
+          "item_id": "rest_023_item_007",
+          "name": "Mixed Fruit Juice",
+          "price": 110,
+          "veg": true,
+          "category": "Juices"
+        },
+        {
+          "item_id": "rest_023_item_008",
+          "name": "Sugarcane Juice",
+          "price": 80,
+          "veg": true,
+          "category": "Juices"
+        },
+        {
+          "item_id": "rest_023_item_009",
+          "name": "Lemon Soda",
+          "price": 70,
+          "veg": true,
+          "category": "Beverages"
+        },
+        {
+          "item_id": "rest_023_item_010",
+          "name": "Cold Coffee",
+          "price": 130,
+          "veg": true,
+          "category": "Beverages"
+        }
+      ],
+      "offers": ["₹20 off above ₹149"],
+      "is_active": true
+    },
+    {
+      "restaurant_id": "rest_024",
+      "name": "Boba Bliss",
+      "description": "Bubble tea, milk teas and iced beverages",
+      "cuisine": ["Beverages"],
+      "rating": 4.3,
+      "reviews_count": 540,
+      "delivery_time_mins": 25,
+      "cost_for_two": 300,
+      "location": {
+        "latitude": "19.0760",
+        "longitude": "72.8777",
+        "city": "Mumbai",
+        "area": "Powai"
+      },
+      "image_url": "https://via.placeholder.com/400x300?text=Boba+Bliss",
+      "menu": [
+        {
+          "item_id": "rest_024_item_001",
+          "name": "Classic Milk Tea",
+          "price": 180,
+          "veg": true,
+          "category": "Bubble Tea"
+        },
+        {
+          "item_id": "rest_024_item_002",
+          "name": "Brown Sugar Boba",
+          "price": 220,
+          "veg": true,
+          "category": "Bubble Tea"
+        },
+        {
+          "item_id": "rest_024_item_003",
+          "name": "Matcha Milk Tea",
+          "price": 210,
+          "veg": true,
+          "category": "Bubble Tea"
+        },
+        {
+          "item_id": "rest_024_item_004",
+          "name": "Taro Milk Tea",
+          "price": 210,
+          "veg": true,
+          "category": "Bubble Tea"
+        },
+        {
+          "item_id": "rest_024_item_005",
+          "name": "Fruit Tea (Peach)",
+          "price": 170,
+          "veg": true,
+          "category": "Iced Tea"
+        },
+        {
+          "item_id": "rest_024_item_006",
+          "name": "Fruit Tea (Lychee)",
+          "price": 170,
+          "veg": true,
+          "category": "Iced Tea"
+        },
+        {
+          "item_id": "rest_024_item_007",
+          "name": "Cold Coffee",
+          "price": 160,
+          "veg": true,
+          "category": "Beverages"
+        },
+        {
+          "item_id": "rest_024_item_008",
+          "name": "Iced Chocolate",
+          "price": 170,
+          "veg": true,
+          "category": "Beverages"
+        },
+        {
+          "item_id": "rest_024_item_009",
+          "name": "Cheese Foam Topping",
+          "price": 40,
+          "veg": true,
+          "category": "Add-ons"
+        },
+        {
+          "item_id": "rest_024_item_010",
+          "name": "Pearl Topping",
+          "price": 30,
+          "veg": true,
+          "category": "Add-ons"
+        }
+      ],
+      "offers": ["Buy 1 Get 1 on classic teas"],
+      "is_active": true
+    },
+    {
+      "restaurant_id": "rest_025",
+      "name": "Chai Stories",
+      "description": "Specialty chai, snacks and quick bites",
+      "cuisine": ["Beverages", "Snacks"],
+      "rating": 4.0,
+      "reviews_count": 720,
+      "delivery_time_mins": 22,
+      "cost_for_two": 220,
+      "location": {
+        "latitude": "28.6139",
+        "longitude": "77.2090",
+        "city": "Delhi",
+        "area": "Connaught Place"
+      },
+      "image_url": "https://via.placeholder.com/400x300?text=Chai+Stories",
+      "menu": [
+        {
+          "item_id": "rest_025_item_001",
+          "name": "Masala Chai",
+          "price": 40,
+          "veg": true,
+          "category": "Tea"
+        },
+        {
+          "item_id": "rest_025_item_002",
+          "name": "Ginger Chai",
+          "price": 45,
+          "veg": true,
+          "category": "Tea"
+        },
+        {
+          "item_id": "rest_025_item_003",
+          "name": "Elaichi Chai",
+          "price": 45,
+          "veg": true,
+          "category": "Tea"
+        },
+        {
+          "item_id": "rest_025_item_004",
+          "name": "Kulhad Chai",
+          "price": 60,
+          "veg": true,
+          "category": "Tea"
+        },
+        {
+          "item_id": "rest_025_item_005",
+          "name": "Samosa (2 pcs)",
+          "price": 70,
+          "veg": true,
+          "category": "Snacks"
+        },
+        {
+          "item_id": "rest_025_item_006",
+          "name": "Paneer Puff",
+          "price": 60,
+          "veg": true,
+          "category": "Snacks"
+        },
+        {
+          "item_id": "rest_025_item_007",
+          "name": "Veg Sandwich",
+          "price": 90,
+          "veg": true,
+          "category": "Snacks"
+        },
+        {
+          "item_id": "rest_025_item_008",
+          "name": "Bun Maska",
+          "price": 60,
+          "veg": true,
+          "category": "Snacks"
+        },
+        {
+          "item_id": "rest_025_item_009",
+          "name": "Chocolate Brownie",
+          "price": 110,
+          "veg": true,
+          "category": "Desserts"
+        },
+        {
+          "item_id": "rest_025_item_010",
+          "name": "Iced Lemon Tea",
+          "price": 90,
+          "veg": true,
+          "category": "Beverages"
+        }
+      ],
+      "offers": ["Chai + Samosa combo at ₹99"],
+      "is_active": true
+    }
+  ]
+}
+

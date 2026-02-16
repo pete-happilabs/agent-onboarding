@@ -1,0 +1,16 @@
+# MCP Bridge Dependencies
+
+# HTTP client for SSE transport
+httpx>=0.25.0
+
+# Configuration
+pyyaml>=6.0
+python-dotenv>=1.0.0
+
+# LLM (ReAct agent for natural language to MCP tool translation)
+openai>=1.0.0
+
+# Optional: WebSocket server (if you want to wrap talk() in a WebSocket)
+# fastapi>=0.104.0
+# uvicorn>=0.24.0
+# websockets>=12.0

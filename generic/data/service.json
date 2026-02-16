@@ -1,0 +1,2266 @@
+[
+  {
+    "service_id": "srv_1001",
+    "name": "Tap Repair",
+    "description": "Fix leaking or broken tap, mixer, or faucet with guaranteed service.",
+    "category": {
+      "category_id": "1",
+      "name": "Plumbing"
+    },
+    "subcategory": {
+      "subcategory_id": "101",
+      "name": "Tap & Mixer"
+    },
+    "pricing": {
+      "base_price": 129.0,
+      "currency": "INR",
+      "base_duration_minutes": 30,
+      "rules": [
+        {
+          "rule_type": "FIXED",
+          "value": 129.0,
+          "notes": "Base price for up to 30 minutes"
+        },
+        {
+          "rule_type": "HOURLY",
+          "value": 200.0,
+          "notes": "Additional hourly charge"
+        }
+      ]
+    },
+    "requirements": {
+      "tools": [
+        "Wrench",
+        "Screwdriver"
+      ],
+      "materials": [
+        "Washers"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "21",
+        "city_name": "Bangaluru",
+        "time_slots": [
+          "10:00-12:00",
+          "16:00-18:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Guarantee",
+        "details": "30-day post-service guarantee"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1002",
+    "name": "Bathroom Deep Cleaning",
+    "description": "Complete deep cleaning of bathroom including tiles, WC, sink, and fittings.",
+    "category": {
+      "category_id": "2",
+      "name": "Cleaning"
+    },
+    "subcategory": {
+      "subcategory_id": "201",
+      "name": "Bathroom Cleaning"
+    },
+    "pricing": {
+      "base_price": 499.0,
+      "currency": "INR",
+      "base_duration_minutes": 60,
+      "rules": [
+        {
+          "rule_type": "FIXED",
+          "value": 499.0,
+          "notes": "One standard bathroom"
+        }
+      ]
+    },
+    "requirements": {
+      "tools": [
+        "Scrubber",
+        "Vacuum"
+      ],
+      "materials": [
+        "Disinfectant"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "11",
+        "city_name": "Delhi",
+        "time_slots": [
+          "09:00-11:00",
+          "15:00-17:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Satisfaction",
+        "details": "Re-clean within 24 hours if not satisfied"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1003",
+    "name": "AC Service",
+    "description": "Complete AC service including filter cleaning and cooling coil wash.",
+    "category": {
+      "category_id": "3",
+      "name": "Appliances"
+    },
+    "subcategory": {
+      "subcategory_id": "301",
+      "name": "AC"
+    },
+    "pricing": {
+      "base_price": 599.0,
+      "currency": "INR",
+      "base_duration_minutes": 45,
+      "rules": [
+        {
+          "rule_type": "SPLIT_AC",
+          "value": 599.0,
+          "notes": "Service charge for split AC"
+        }
+      ]
+    },
+    "requirements": {
+      "tools": [
+        "Pressure washer"
+      ],
+      "materials": [
+        "Cleaning foam"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "31",
+        "city_name": "Mumbai",
+        "time_slots": [
+          "10:00-12:00",
+          "14:00-16:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Warranty",
+        "details": "7-day service warranty"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1004",
+    "name": "Sofa Cleaning",
+    "description": "Vacuuming, shampooing, and deep cleaning of sofa upholstery.",
+    "category": {
+      "category_id": "2",
+      "name": "Cleaning"
+    },
+    "subcategory": {
+      "subcategory_id": "202",
+      "name": "Sofa & Upholstery"
+    },
+    "pricing": {
+      "base_price": 999.0,
+      "currency": "INR",
+      "base_duration_minutes": 90,
+      "rules": [
+        {
+          "rule_type": "PER_SEATER",
+          "value": 150.0,
+          "notes": "Price per sofa seat"
+        }
+      ]
+    },
+    "requirements": {
+      "tools": [
+        "Vacuum cleaner"
+      ],
+      "materials": [
+        "Shampoo"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "21",
+        "city_name": "Bangaluru",
+        "time_slots": [
+          "09:00-11:00",
+          "13:00-15:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Satisfaction",
+        "details": "Re-clean within 24 hours"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1005",
+    "name": "Haircut at Home",
+    "description": "Professional haircut service at your home with hygienic tools.",
+    "category": {
+      "category_id": "4",
+      "name": "Salon for Men"
+    },
+    "subcategory": {
+      "subcategory_id": "401",
+      "name": "Haircut"
+    },
+    "pricing": {
+      "base_price": 249.0,
+      "currency": "INR",
+      "base_duration_minutes": 40,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Scissors",
+        "Trimmer"
+      ],
+      "materials": [
+        "Hair cape"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "11",
+        "city_name": "Delhi",
+        "time_slots": [
+          "10:00-13:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Hygiene",
+        "details": "Tools sanitized before use"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1006",
+    "name": "Pedicure & Manicure",
+    "description": "Professional pedicure and manicure service at home.",
+    "category": {
+      "category_id": "5",
+      "name": "Salon for Women"
+    },
+    "subcategory": {
+      "subcategory_id": "501",
+      "name": "Nail Care"
+    },
+    "pricing": {
+      "base_price": 799.0,
+      "currency": "INR",
+      "base_duration_minutes": 90,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Nail cutter"
+      ],
+      "materials": [
+        "Moisturizer"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "31",
+        "city_name": "Mumbai",
+        "time_slots": [
+          "11:00-13:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Hygiene",
+        "details": "Disposable kits used"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1007",
+    "name": "House Painting",
+    "description": "Professional painting service with Asian Paints.",
+    "category": {
+      "category_id": "6",
+      "name": "Painting"
+    },
+    "subcategory": {
+      "subcategory_id": "601",
+      "name": "Interior Painting"
+    },
+    "pricing": {
+      "base_price": 6999.0,
+      "currency": "INR",
+      "base_duration_minutes": 600,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Roller"
+      ],
+      "materials": [
+        "Asian Paints"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "21",
+        "city_name": "Bangaluru",
+        "time_slots": [
+          "09:00-18:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Warranty",
+        "details": "2-year paint warranty"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1008",
+    "name": "Cockroach & Ant Control",
+    "description": "Safe herbal pest control treatment.",
+    "category": {
+      "category_id": "7",
+      "name": "Pest Control"
+    },
+    "subcategory": {
+      "subcategory_id": "701",
+      "name": "Cockroach & Ant"
+    },
+    "pricing": {
+      "base_price": 899.0,
+      "currency": "INR",
+      "base_duration_minutes": 60,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Sprayer"
+      ],
+      "materials": [
+        "Herbal Gel"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "11",
+        "city_name": "Delhi",
+        "time_slots": [
+          "09:00-12:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Guarantee",
+        "details": "90-day guarantee"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1009",
+    "name": "Electrician - Fan Repair",
+    "description": "Ceiling fan installation and repair service.",
+    "category": {
+      "category_id": "8",
+      "name": "Electrician"
+    },
+    "subcategory": {
+      "subcategory_id": "801",
+      "name": "Fan & Lights"
+    },
+    "pricing": {
+      "base_price": 149.0,
+      "currency": "INR",
+      "base_duration_minutes": 30,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Tester"
+      ],
+      "materials": [
+        "Capacitor"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "31",
+        "city_name": "Mumbai",
+        "time_slots": [
+          "10:00-12:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Warranty",
+        "details": "7-day warranty"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1010",
+    "name": "Washing Machine Repair",
+    "description": "Front-load and top-load repair.",
+    "category": {
+      "category_id": "3",
+      "name": "Appliances"
+    },
+    "subcategory": {
+      "subcategory_id": "302",
+      "name": "Washing Machine"
+    },
+    "pricing": {
+      "base_price": 299.0,
+      "currency": "INR",
+      "base_duration_minutes": 45,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Spanner"
+      ],
+      "materials": [
+        "Belts"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "21",
+        "city_name": "Bangaluru",
+        "time_slots": [
+          "11:00-13:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Warranty",
+        "details": "30-day warranty"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1011",
+    "name": "Refrigerator Repair",
+    "description": "Fridge cooling and gas refill services.",
+    "category": {
+      "category_id": "3",
+      "name": "Appliances"
+    },
+    "subcategory": {
+      "subcategory_id": "303",
+      "name": "Refrigerator"
+    },
+    "pricing": {
+      "base_price": 299.0,
+      "currency": "INR",
+      "base_duration_minutes": 40,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Pressure meter"
+      ],
+      "materials": [
+        "Gas"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "11",
+        "city_name": "Delhi",
+        "time_slots": [
+          "09:00-11:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Warranty",
+        "details": "30-day warranty"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1012",
+    "name": "Massage for Men",
+    "description": "Full body relaxation massage.",
+    "category": {
+      "category_id": "9",
+      "name": "Massage"
+    },
+    "subcategory": {
+      "subcategory_id": "901",
+      "name": "Relaxation"
+    },
+    "pricing": {
+      "base_price": 1299.0,
+      "currency": "INR",
+      "base_duration_minutes": 60,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Massage table"
+      ],
+      "materials": [
+        "Oils"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "31",
+        "city_name": "Mumbai",
+        "time_slots": [
+          "12:00-14:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Safety",
+        "details": "Verified professionals"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1013",
+    "name": "Massage for Women",
+    "description": "Relaxation massage by female therapist.",
+    "category": {
+      "category_id": "9",
+      "name": "Massage"
+    },
+    "subcategory": {
+      "subcategory_id": "902",
+      "name": "Relaxation"
+    },
+    "pricing": {
+      "base_price": 1399.0,
+      "currency": "INR",
+      "base_duration_minutes": 60,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Massage bed"
+      ],
+      "materials": [
+        "Essential oils"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "21",
+        "city_name": "Bangaluru",
+        "time_slots": [
+          "11:00-13:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Safety",
+        "details": "Female therapists only"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1014",
+    "name": "Full Home Deep Cleaning",
+    "description": "Deep cleaning of entire home.",
+    "category": {
+      "category_id": "2",
+      "name": "Cleaning"
+    },
+    "subcategory": {
+      "subcategory_id": "203",
+      "name": "Full Home"
+    },
+    "pricing": {
+      "base_price": 2499.0,
+      "currency": "INR",
+      "base_duration_minutes": 240,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Vacuum"
+      ],
+      "materials": [
+        "Cleaners"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "11",
+        "city_name": "Delhi",
+        "time_slots": [
+          "09:00-13:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Satisfaction",
+        "details": "Free re-clean within 24h"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1015",
+    "name": "Car Interior Cleaning",
+    "description": "Vacuuming and detailing of car interior.",
+    "category": {
+      "category_id": "10",
+      "name": "Car Care"
+    },
+    "subcategory": {
+      "subcategory_id": "1001",
+      "name": "Interior Cleaning"
+    },
+    "pricing": {
+      "base_price": 699.0,
+      "currency": "INR",
+      "base_duration_minutes": 90,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Foam sprayer"
+      ],
+      "materials": [
+        "Shampoo"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "31",
+        "city_name": "Mumbai",
+        "time_slots": [
+          "09:00-11:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Satisfaction",
+        "details": "Re-clean guarantee"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1016",
+    "name": "Microwave Repair",
+    "description": "Repair of heating or display problems.",
+    "category": {
+      "category_id": "3",
+      "name": "Appliances"
+    },
+    "subcategory": {
+      "subcategory_id": "304",
+      "name": "Microwave"
+    },
+    "pricing": {
+      "base_price": 299.0,
+      "currency": "INR",
+      "base_duration_minutes": 40,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Multimeter"
+      ],
+      "materials": [
+        "Magnetron"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "21",
+        "city_name": "Bangaluru",
+        "time_slots": [
+          "12:00-14:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Warranty",
+        "details": "15-day warranty"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1017",
+    "name": "TV Installation",
+    "description": "Wall-mounting of LED/LCD TVs.",
+    "category": {
+      "category_id": "3",
+      "name": "Appliances"
+    },
+    "subcategory": {
+      "subcategory_id": "305",
+      "name": "Television"
+    },
+    "pricing": {
+      "base_price": 399.0,
+      "currency": "INR",
+      "base_duration_minutes": 45,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Drill"
+      ],
+      "materials": [
+        "Brackets"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "11",
+        "city_name": "Delhi",
+        "time_slots": [
+          "10:00-12:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Safety",
+        "details": "Secure brackets"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1018",
+    "name": "Kitchen Trolley Repair",
+    "description": "Repair of modular kitchen hinges/drawers.",
+    "category": {
+      "category_id": "11",
+      "name": "Carpentry"
+    },
+    "subcategory": {
+      "subcategory_id": "1101",
+      "name": "Kitchen Work"
+    },
+    "pricing": {
+      "base_price": 199.0,
+      "currency": "INR",
+      "base_duration_minutes": 30,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Screwdriver"
+      ],
+      "materials": [
+        "Hinges"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "31",
+        "city_name": "Mumbai",
+        "time_slots": [
+          "11:00-13:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Warranty",
+        "details": "15-day warranty"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1019",
+    "name": "Water Tank Cleaning",
+    "description": "Mechanized cleaning of tanks.",
+    "category": {
+      "category_id": "2",
+      "name": "Cleaning"
+    },
+    "subcategory": {
+      "subcategory_id": "204",
+      "name": "Tank Cleaning"
+    },
+    "pricing": {
+      "base_price": 899.0,
+      "currency": "INR",
+      "base_duration_minutes": 120,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Jet pump"
+      ],
+      "materials": [
+        "Bleach"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "21",
+        "city_name": "Bangaluru",
+        "time_slots": [
+          "09:00-11:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Safety",
+        "details": "Chemical-safe"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1020",
+    "name": "RO Water Purifier Service",
+    "description": "Cleaning and filter replacement.",
+    "category": {
+      "category_id": "3",
+      "name": "Appliances"
+    },
+    "subcategory": {
+      "subcategory_id": "306",
+      "name": "RO Service"
+    },
+    "pricing": {
+      "base_price": 399.0,
+      "currency": "INR",
+      "base_duration_minutes": 40,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Wrench"
+      ],
+      "materials": [
+        "Filters"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "11",
+        "city_name": "Delhi",
+        "time_slots": [
+          "10:00-12:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Warranty",
+        "details": "15-day warranty"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1021",
+    "name": "Yoga Trainer at Home",
+    "description": "Personal 1-on-1 yoga sessions for fitness and mindfulness.",
+    "category": {
+      "category_id": "12",
+      "name": "Fitness"
+    },
+    "subcategory": {
+      "subcategory_id": "1201",
+      "name": "Yoga"
+    },
+    "pricing": {
+      "base_price": 500.0,
+      "currency": "INR",
+      "base_duration_minutes": 60,
+      "rules": [
+        {
+          "rule_type": "PER_SESSION",
+          "value": 500.0,
+          "notes": "One hour session"
+        }
+      ]
+    },
+    "requirements": {
+      "tools": [
+        "Yoga mat"
+      ],
+      "materials": []
+    },
+    "availability": [
+      {
+        "city_id": "21",
+        "city_name": "Bangaluru",
+        "time_slots": [
+          "06:00-08:00",
+          "18:00-20:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Experience",
+        "details": "Certified trainers only"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1022",
+    "name": "Garden Maintenance",
+    "description": "Pruning, weeding, and fertilization of home gardens.",
+    "category": {
+      "category_id": "13",
+      "name": "Gardening"
+    },
+    "subcategory": {
+      "subcategory_id": "1301",
+      "name": "Maintenance"
+    },
+    "pricing": {
+      "base_price": 799.0,
+      "currency": "INR",
+      "base_duration_minutes": 120,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Pruner",
+        "Trowel"
+      ],
+      "materials": [
+        "Organic manure"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "21",
+        "city_name": "Bangaluru",
+        "time_slots": [
+          "08:00-11:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Quality",
+        "details": "Eco-friendly fertilizers used"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1023",
+    "name": "Pet Grooming",
+    "description": "Bathing, hair trimming, and nail clipping for pets.",
+    "category": {
+      "category_id": "14",
+      "name": "Pet Care"
+    },
+    "subcategory": {
+      "subcategory_id": "1401",
+      "name": "Grooming"
+    },
+    "pricing": {
+      "base_price": 1200.0,
+      "currency": "INR",
+      "base_duration_minutes": 90,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Clippers",
+        "Brush"
+      ],
+      "materials": [
+        "Pet shampoo"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "21",
+        "city_name": "Bangaluru",
+        "time_slots": [
+          "10:00-13:00",
+          "15:00-18:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Safety",
+        "details": "Stress-free grooming environment"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1024",
+    "name": "Chimney Cleaning",
+    "description": "Complete degreasing and cleaning of kitchen chimney.",
+    "category": {
+      "category_id": "3",
+      "name": "Appliances"
+    },
+    "subcategory": {
+      "subcategory_id": "307",
+      "name": "Chimney"
+    },
+    "pricing": {
+      "base_price": 899.0,
+      "currency": "INR",
+      "base_duration_minutes": 60,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Scraper"
+      ],
+      "materials": [
+        "Degreasing agent"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "21",
+        "city_name": "Bangaluru",
+        "time_slots": [
+          "11:00-13:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Guarantee",
+        "details": "Smoke-free performance"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1025",
+    "name": "Door Lock Repair",
+    "description": "Fixing jammed locks or installing new smart locks.",
+    "category": {
+      "category_id": "11",
+      "name": "Carpentry"
+    },
+    "subcategory": {
+      "subcategory_id": "1102",
+      "name": "General Work"
+    },
+    "pricing": {
+      "base_price": 249.0,
+      "currency": "INR",
+      "base_duration_minutes": 30,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Chisel",
+        "Drill"
+      ],
+      "materials": [
+        "Lubricant"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "21",
+        "city_name": "Bangaluru",
+        "time_slots": [
+          "09:00-11:00",
+          "16:00-18:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Security",
+        "details": "Background-verified carpenters"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1026",
+    "name": "Geyser Repair",
+    "description": "Fixing heating issues or water leakage in geysers.",
+    "category": {
+      "category_id": "3",
+      "name": "Appliances"
+    },
+    "subcategory": {
+      "subcategory_id": "308",
+      "name": "Geyser"
+    },
+    "pricing": {
+      "base_price": 299.0,
+      "currency": "INR",
+      "base_duration_minutes": 45,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Wrench"
+      ],
+      "materials": [
+        "Heating element"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "21",
+        "city_name": "Bangaluru",
+        "time_slots": [
+          "08:00-10:00",
+          "17:00-19:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Warranty",
+        "details": "30-day service warranty"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1027",
+    "name": "CCTV Installation",
+    "description": "Installation and configuration of security cameras.",
+    "category": {
+      "category_id": "15",
+      "name": "Security"
+    },
+    "subcategory": {
+      "subcategory_id": "1501",
+      "name": "Installation"
+    },
+    "pricing": {
+      "base_price": 1500.0,
+      "currency": "INR",
+      "base_duration_minutes": 180,
+      "rules": [
+        {
+          "rule_type": "PER_CAMERA",
+          "value": 300.0,
+          "notes": "Configuration charge per camera"
+        }
+      ]
+    },
+    "requirements": {
+      "tools": [
+        "Drill",
+        "Crimper"
+      ],
+      "materials": [
+        "Cables",
+        "BNC connectors"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "21",
+        "city_name": "Bangaluru",
+        "time_slots": [
+          "10:00-14:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Assurance",
+        "details": "90-day installation support"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1028",
+    "name": "Laptop Service",
+    "description": "General servicing and hardware cleaning of laptops.",
+    "category": {
+      "category_id": "16",
+      "name": "Tech Support"
+    },
+    "subcategory": {
+      "subcategory_id": "1601",
+      "name": "Hardware"
+    },
+    "pricing": {
+      "base_price": 499.0,
+      "currency": "INR",
+      "base_duration_minutes": 60,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Precision screwdrivers"
+      ],
+      "materials": [
+        "Thermal paste"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "21",
+        "city_name": "Bangaluru",
+        "time_slots": [
+          "11:00-13:00",
+          "15:00-17:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Data Safety",
+        "details": "No data loss guarantee"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1029",
+    "name": "Balcony Safety Nets",
+    "description": "Installation of high-quality safety nets for balconies.",
+    "category": {
+      "category_id": "17",
+      "name": "Home Improvement"
+    },
+    "subcategory": {
+      "subcategory_id": "1701",
+      "name": "Safety"
+    },
+    "pricing": {
+      "base_price": 1200.0,
+      "currency": "INR",
+      "base_duration_minutes": 90,
+      "rules": [
+        {
+          "rule_type": "SQFT",
+          "value": 15.0,
+          "notes": "Price per sq. ft. after base"
+        }
+      ]
+    },
+    "requirements": {
+      "tools": [
+        "Hammer drill"
+      ],
+      "materials": [
+        "Nylon net",
+        "Hooks"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "21",
+        "city_name": "Bangaluru",
+        "time_slots": [
+          "09:00-12:00",
+          "14:00-17:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Warranty",
+        "details": "5-year net durability"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1030",
+    "name": "Physiotherapy at Home",
+    "description": "Professional physical therapy sessions for recovery.",
+    "category": {
+      "category_id": "18",
+      "name": "Healthcare"
+    },
+    "subcategory": {
+      "subcategory_id": "1801",
+      "name": "Therapy"
+    },
+    "pricing": {
+      "base_price": 800.0,
+      "currency": "INR",
+      "base_duration_minutes": 60,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "TENS machine"
+      ],
+      "materials": []
+    },
+    "availability": [
+      {
+        "city_id": "21",
+        "city_name": "Bangaluru",
+        "time_slots": [
+          "07:00-09:00",
+          "17:00-19:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Medical",
+        "details": "Registered physiotherapists only"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1031",
+    "name": "Kitchen Deep Cleaning",
+    "description": "Degreasing of tiles, cabinets, and appliances.",
+    "category": {
+      "category_id": "2",
+      "name": "Cleaning"
+    },
+    "subcategory": {
+      "subcategory_id": "205",
+      "name": "Kitchen Cleaning"
+    },
+    "pricing": {
+      "base_price": 1499.0,
+      "currency": "INR",
+      "base_duration_minutes": 150,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Steam cleaner"
+      ],
+      "materials": [
+        "Oil remover"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "21",
+        "city_name": "Bangaluru",
+        "time_slots": [
+          "10:00-13:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Quality",
+        "details": "Sparkling clean finish"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1032",
+    "name": "Termite Treatment",
+    "description": "Drill-Fill-Seal treatment for termite protection.",
+    "category": {
+      "category_id": "7",
+      "name": "Pest Control"
+    },
+    "subcategory": {
+      "subcategory_id": "702",
+      "name": "Termite"
+    },
+    "pricing": {
+      "base_price": 2499.0,
+      "currency": "INR",
+      "base_duration_minutes": 180,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Heavy drill"
+      ],
+      "materials": [
+        "Anti-termite chemical"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "21",
+        "city_name": "Bangaluru",
+        "time_slots": [
+          "09:00-13:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Warranty",
+        "details": "1-year warranty"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1033",
+    "name": "Furniture Assembly",
+    "description": "Assembly of IKEA or other branded furniture.",
+    "category": {
+      "category_id": "11",
+      "name": "Carpentry"
+    },
+    "subcategory": {
+      "subcategory_id": "1103",
+      "name": "Assembly"
+    },
+    "pricing": {
+      "base_price": 499.0,
+      "currency": "INR",
+      "base_duration_minutes": 60,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Electric screwdriver"
+      ],
+      "materials": []
+    },
+    "availability": [
+      {
+        "city_id": "21",
+        "city_name": "Bangaluru",
+        "time_slots": [
+          "11:00-15:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Care",
+        "details": "Scratch-free assembly"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1034",
+    "name": "Wall Waterproofing",
+    "description": "Treatment for wall dampness and fungal growth.",
+    "category": {
+      "category_id": "6",
+      "name": "Painting"
+    },
+    "subcategory": {
+      "subcategory_id": "602",
+      "name": "Waterproofing"
+    },
+    "pricing": {
+      "base_price": 4500.0,
+      "currency": "INR",
+      "base_duration_minutes": 300,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Scraper"
+      ],
+      "materials": [
+        "Waterproof coating"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "21",
+        "city_name": "Bangaluru",
+        "time_slots": [
+          "09:00-14:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Guarantee",
+        "details": "3-year damp-free guarantee"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1035",
+    "name": "Gas Stove Repair",
+    "description": "Fixing gas leakage or burner flame issues.",
+    "category": {
+      "category_id": "3",
+      "name": "Appliances"
+    },
+    "subcategory": {
+      "subcategory_id": "309",
+      "name": "Stove"
+    },
+    "pricing": {
+      "base_price": 199.0,
+      "currency": "INR",
+      "base_duration_minutes": 30,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Pliers"
+      ],
+      "materials": [
+        "Gas pipe"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "21",
+        "city_name": "Bangaluru",
+        "time_slots": [
+          "10:00-12:00",
+          "16:00-18:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Safety",
+        "details": "Post-repair leakage check"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1036",
+    "name": "Makeup Artist",
+    "description": "Professional party or bridal makeup at home.",
+    "category": {
+      "category_id": "5",
+      "name": "Salon for Women"
+    },
+    "subcategory": {
+      "subcategory_id": "502",
+      "name": "Makeup"
+    },
+    "pricing": {
+      "base_price": 2500.0,
+      "currency": "INR",
+      "base_duration_minutes": 120,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Makeup brushes"
+      ],
+      "materials": [
+        "Cosmetics"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "21",
+        "city_name": "Bangaluru",
+        "time_slots": [
+          "07:00-11:00",
+          "14:00-18:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Hygiene",
+        "details": "Sanitized kits only"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1037",
+    "name": "Mattress Steam Cleaning",
+    "description": "Sanitization and dust mite removal from mattresses.",
+    "category": {
+      "category_id": "2",
+      "name": "Cleaning"
+    },
+    "subcategory": {
+      "subcategory_id": "206",
+      "name": "Mattress"
+    },
+    "pricing": {
+      "base_price": 699.0,
+      "currency": "INR",
+      "base_duration_minutes": 45,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Steam machine"
+      ],
+      "materials": []
+    },
+    "availability": [
+      {
+        "city_id": "21",
+        "city_name": "Bangaluru",
+        "time_slots": [
+          "10:00-13:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Health",
+        "details": "99% bacteria removal"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1038",
+    "name": "Curtains Installation",
+    "description": "Mounting of curtain rods and hanging curtains.",
+    "category": {
+      "category_id": "17",
+      "name": "Home Improvement"
+    },
+    "subcategory": {
+      "subcategory_id": "1702",
+      "name": "Installation"
+    },
+    "pricing": {
+      "base_price": 199.0,
+      "currency": "INR",
+      "base_duration_minutes": 30,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Drill machine"
+      ],
+      "materials": [
+        "Wall plugs"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "21",
+        "city_name": "Bangaluru",
+        "time_slots": [
+          "11:00-14:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Precision",
+        "details": "Level-check included"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1039",
+    "name": "Dog Walking",
+    "description": "30-minute daily walking service for your pet.",
+    "category": {
+      "category_id": "14",
+      "name": "Pet Care"
+    },
+    "subcategory": {
+      "subcategory_id": "1402",
+      "name": "Walking"
+    },
+    "pricing": {
+      "base_price": 200.0,
+      "currency": "INR",
+      "base_duration_minutes": 30,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Leash"
+      ],
+      "materials": []
+    },
+    "availability": [
+      {
+        "city_id": "21",
+        "city_name": "Bangaluru",
+        "time_slots": [
+          "06:00-08:00",
+          "18:00-20:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Safety",
+        "details": "Experienced handlers"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1040",
+    "name": "Home Theater Setup",
+    "description": "Installation and wiring of surround sound systems.",
+    "category": {
+      "category_id": "15",
+      "name": "Security"
+    },
+    "subcategory": {
+      "subcategory_id": "1502",
+      "name": "Wiring"
+    },
+    "pricing": {
+      "base_price": 999.0,
+      "currency": "INR",
+      "base_duration_minutes": 120,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Stripper"
+      ],
+      "materials": [
+        "Speaker wire"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "21",
+        "city_name": "Bangaluru",
+        "time_slots": [
+          "12:00-16:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Quality",
+        "details": "Audio calibration included"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1041",
+    "name": "Mosquito Net for Windows",
+    "description": "Installation of velcro or frame mosquito nets.",
+    "category": {
+      "category_id": "17",
+      "name": "Home Improvement"
+    },
+    "subcategory": {
+      "subcategory_id": "1703",
+      "name": "Mesh"
+    },
+    "pricing": {
+      "base_price": 899.0,
+      "currency": "INR",
+      "base_duration_minutes": 60,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Stapler gun"
+      ],
+      "materials": [
+        "Fiber mesh"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "21",
+        "city_name": "Bangaluru",
+        "time_slots": [
+          "10:00-13:00",
+          "15:00-17:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Warranty",
+        "details": "1-year mesh warranty"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1042",
+    "name": "Zumba Instructor",
+    "description": "Dance-based fitness sessions at your home.",
+    "category": {
+      "category_id": "12",
+      "name": "Fitness"
+    },
+    "subcategory": {
+      "subcategory_id": "1202",
+      "name": "Zumba"
+    },
+    "pricing": {
+      "base_price": 600.0,
+      "currency": "INR",
+      "base_duration_minutes": 60,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Music player"
+      ],
+      "materials": []
+    },
+    "availability": [
+      {
+        "city_id": "21",
+        "city_name": "Bangaluru",
+        "time_slots": [
+          "07:00-09:00",
+          "18:00-20:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Energy",
+        "details": "Certified Zumba trainers"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1043",
+    "name": "Electrician - MCB Repair",
+    "description": "Troubleshooting circuit breaker tripping issues.",
+    "category": {
+      "category_id": "8",
+      "name": "Electrician"
+    },
+    "subcategory": {
+      "subcategory_id": "802",
+      "name": "Wiring"
+    },
+    "pricing": {
+      "base_price": 199.0,
+      "currency": "INR",
+      "base_duration_minutes": 30,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Tester"
+      ],
+      "materials": [
+        "MCB"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "21",
+        "city_name": "Bangaluru",
+        "time_slots": [
+          "09:00-11:00",
+          "16:00-18:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Safety",
+        "details": "Safety checks included"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1044",
+    "name": "Facial & Skin Care",
+    "description": "Refreshing facial treatments at your home.",
+    "category": {
+      "category_id": "5",
+      "name": "Salon for Women"
+    },
+    "subcategory": {
+      "subcategory_id": "503",
+      "name": "Facial"
+    },
+    "pricing": {
+      "base_price": 999.0,
+      "currency": "INR",
+      "base_duration_minutes": 75,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Steamer"
+      ],
+      "materials": [
+        "Facial kit"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "21",
+        "city_name": "Bangaluru",
+        "time_slots": [
+          "11:00-15:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Hygiene",
+        "details": "Disposable materials used"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1045",
+    "name": "Inverter Repair",
+    "description": "Fixing battery or charging issues in home inverters.",
+    "category": {
+      "category_id": "3",
+      "name": "Appliances"
+    },
+    "subcategory": {
+      "subcategory_id": "310",
+      "name": "Inverter"
+    },
+    "pricing": {
+      "base_price": 399.0,
+      "currency": "INR",
+      "base_duration_minutes": 60,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Hydrometer"
+      ],
+      "materials": [
+        "Distilled water"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "21",
+        "city_name": "Bangaluru",
+        "time_slots": [
+          "10:00-12:00",
+          "14:00-16:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Warranty",
+        "details": "30-day warranty"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1046",
+    "name": "Car Foam Wash",
+    "description": "Deep exterior foam cleaning at your doorstep.",
+    "category": {
+      "category_id": "10",
+      "name": "Car Care"
+    },
+    "subcategory": {
+      "subcategory_id": "1002",
+      "name": "Exterior Wash"
+    },
+    "pricing": {
+      "base_price": 499.0,
+      "currency": "INR",
+      "base_duration_minutes": 60,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Pressure washer"
+      ],
+      "materials": [
+        "Foam shampoo"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "21",
+        "city_name": "Bangaluru",
+        "time_slots": [
+          "08:00-11:00",
+          "15:00-18:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Shine",
+        "details": "Wax finish included"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1047",
+    "name": "Mobile Screen Repair",
+    "description": "At-home screen replacement for smartphones.",
+    "category": {
+      "category_id": "16",
+      "name": "Tech Support"
+    },
+    "subcategory": {
+      "subcategory_id": "1602",
+      "name": "Hardware"
+    },
+    "pricing": {
+      "base_price": 999.0,
+      "currency": "INR",
+      "base_duration_minutes": 60,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Suction cup"
+      ],
+      "materials": [
+        "Display"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "21",
+        "city_name": "Bangaluru",
+        "time_slots": [
+          "11:00-17:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Warranty",
+        "details": "90-day screen warranty"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1048",
+    "name": "Sanitization Service",
+    "description": "Hospital-grade sanitization for home or office.",
+    "category": {
+      "category_id": "2",
+      "name": "Cleaning"
+    },
+    "subcategory": {
+      "subcategory_id": "207",
+      "name": "Sanitization"
+    },
+    "pricing": {
+      "base_price": 999.0,
+      "currency": "INR",
+      "base_duration_minutes": 60,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Fogging machine"
+      ],
+      "materials": [
+        "Disinfectant"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "21",
+        "city_name": "Bangaluru",
+        "time_slots": [
+          "10:00-14:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Safety",
+        "details": "WHO-approved chemicals"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1049",
+    "name": "Bathroom Leakage Repair",
+    "description": "Fixing floor leakage via tile grouting.",
+    "category": {
+      "category_id": "1",
+      "name": "Plumbing"
+    },
+    "subcategory": {
+      "subcategory_id": "102",
+      "name": "Leakage"
+    },
+    "pricing": {
+      "base_price": 1999.0,
+      "currency": "INR",
+      "base_duration_minutes": 150,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Grinder"
+      ],
+      "materials": [
+        "Epoxy grout"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "21",
+        "city_name": "Bangaluru",
+        "time_slots": [
+          "09:00-13:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Warranty",
+        "details": "1-year leakage warranty"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "service_id": "srv_1050",
+    "name": "Bed Bug Treatment",
+    "description": "High-intensity spray for bed bug eradication.",
+    "category": {
+      "category_id": "7",
+      "name": "Pest Control"
+    },
+    "subcategory": {
+      "subcategory_id": "703",
+      "name": "Bed Bugs"
+    },
+    "pricing": {
+      "base_price": 1200.0,
+      "currency": "INR",
+      "base_duration_minutes": 90,
+      "rules": []
+    },
+    "requirements": {
+      "tools": [
+        "Sprayer"
+      ],
+      "materials": [
+        "Insecticide"
+      ]
+    },
+    "availability": [
+      {
+        "city_id": "21",
+        "city_name": "Bangaluru",
+        "time_slots": [
+          "10:00-13:00",
+          "14:00-17:00"
+        ],
+        "is_available": true
+      }
+    ],
+    "policies": [
+      {
+        "policy_type": "Follow-up",
+        "details": "Second spray after 15 days"
+      }
+    ],
+    "is_active": true
+  }
+]

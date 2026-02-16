@@ -1,0 +1,25 @@
+# ============================================================================
+# Test MCP Server Configuration
+# ============================================================================
+# Uses the official MCP test server for development and testing.
+# No authentication required.
+
+mcp:
+  # Use "stdio" transport - runs MCP server as local subprocess
+  transport: stdio
+
+  # Official MCP test server with example tools
+  command: "npx -y @modelcontextprotocol/server-everything"
+
+  # Request timeout (seconds)
+  timeout: 30
+
+# Agent identity (used in dostEvent responses)
+agent:
+  entity_id: "agent.mcp.test"
+  name: "Test MCP Server"
+
+# WebSocket server (if running as server)
+server:
+  host: "0.0.0.0"
+  port: 8003

@@ -1,0 +1,172 @@
+# ============================================================================
+# Custom REST API Configuration Template
+# ============================================================================
+#
+# This template shows how to define your REST APIs as tools for the AI agent.
+# Copy this file and customize for your service.
+#
+# Usage:
+#   1. Copy to configs/my-service.yaml
+#   2. Update service name and base_url
+#   3. Configure authentication
+#   4. Define your API endpoints as tools
+#   5. Set CUSTOM_CONFIG_PATH=configs/my-service.yaml
+#
+# ============================================================================
+
+# Service Configuration
+service:
+  name: "my-service"
+  base_url: "https://api.myservice.com/v1"
+
+# Agent Configuration (optional)
+agent:
+  # Use a built-in prompt or define custom in app/llm/prompts.py
+  # Options: default, ride_booking, food_delivery, hotel_booking, ecommerce
+  prompt_name: "default"
+
+# Authentication
+# Supported types: bearer, api_key, basic, oauth2, none
+auth:
+  type: "bearer"
+  token_env: "MY_SERVICE_API_TOKEN"  # Read from environment variable
+
+# Alternative auth configurations:
+#
+# API Key:
+# auth:
+#   type: "api_key"
+#   header: "X-API-Key"
+#   key_env: "MY_API_KEY"
+#
+# Basic Auth:
+# auth:
+#   type: "basic"
+#   username_env: "MY_USERNAME"
+#   password_env: "MY_PASSWORD"
+#
+# OAuth2 (Client Credentials):
+# auth:
+#   type: "oauth2"
+#   token_url: "https://auth.myservice.com/oauth/token"
+#   client_id_env: "MY_CLIENT_ID"
+#   client_secret_env: "MY_CLIENT_SECRET"
+#   scope: "read write"
+
+# Tool Definitions
+# Each tool maps to a REST API endpoint
+tools:
+  # Example 1: Search endpoint (GET with query params)
+  - name: "search_items"
+    description: "Search for items by query and optional filters"
+    endpoint: "/items/search"
+    method: "GET"
+    parameters:
+      - name: "query"
+        type: "string"
+        required: true
+        description: "Search query text"
+        in: "query"
+      - name: "category"
+        type: "string"
+        required: false
+        description: "Filter by category"
+        in: "query"
+      - name: "limit"
+        type: "integer"
+        required: false
+        description: "Maximum number of results"
+        in: "query"
+        default: 10
+    response_mapping:
+      items_path: "data.items"
+      title_field: "name"
+      description_field: "description"
+      price_field: "price"
+      image_field: "thumbnail_url"
+      category_title: "Search Results"
+
+  # Example 2: Create endpoint (POST with body)
+  - name: "create_order"
+    description: "Create a new order with specified items"
+    endpoint: "/orders"
+    method: "POST"
+    parameters:
+      - name: "item_id"
+        type: "string"
+        required: true
+        description: "ID of the item to order"
+      - name: "quantity"
+        type: "integer"
+        required: true
+        description: "Quantity to order"
+      - name: "delivery_address"
+        type: "string"
+        required: true
+        description: "Delivery address"
+      - name: "notes"
+        type: "string"
+        required: false
+        description: "Special instructions"
+    response_mapping:
+      title_field: "order_id"
+      description_field: "status"
+      object_type: "order"
+
+  # Example 3: Path parameter endpoint (GET with path param)
+  - name: "get_item_details"
+    description: "Get detailed information about a specific item"
+    endpoint: "/items/{item_id}"
+    method: "GET"
+    parameters:
+      - name: "item_id"
+        type: "string"
+        required: true
+        description: "The item ID"
+        in: "path"
+    response_mapping:
+      title_field: "name"
+      description_field: "full_description"
+      price_field: "price"
+      image_field: "image_url"
+      location_fields:
+        latitude: "location.lat"
+        longitude: "location.lng"
+        address: "location.address"
+
+  # Example 4: Action endpoint (DELETE/POST with path param)
+  - name: "cancel_order"
+    description: "Cancel an existing order"
+    endpoint: "/orders/{order_id}/cancel"
+    method: "POST"
+    parameters:
+      - name: "order_id"
+        type: "string"
+        required: true
+        description: "The order ID to cancel"
+        in: "path"
+      - name: "reason"
+        type: "string"
+        required: false
+        description: "Cancellation reason"
+
+# ============================================================================
+# Response Mapping Reference
+# ============================================================================
+#
+# response_mapping fields:
+#   items_path: "path.to.array"     # Path to items array in response
+#   title_field: "name"             # Field for dostObject.title
+#   description_field: "desc"       # Field for dostObject.description
+#   price_field: "price"            # Field for dostObject.pricing
+#   image_field: "image_url"        # Field for dostObject.media.images
+#   reputation_field: "rating"      # Field for dostObject.reputation
+#   tags_field: "tags"              # Field for dostObject.tags
+#   object_type: "item"             # Type for dostObject.type
+#   category_title: "Results"       # Title for dostCategory
+#   location_fields:
+#     latitude: "loc.lat"
+#     longitude: "loc.lng"
+#     address: "loc.address"
+#
+# ============================================================================

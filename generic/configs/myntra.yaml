@@ -1,0 +1,6 @@
+# OmniAgent Domain Configuration - Myntra
+domain_name: myntra
+entity_id: com.myntra.fashion
+description: AI agent for fashion shopping
+model: gpt-4o-mini
+currency: INR

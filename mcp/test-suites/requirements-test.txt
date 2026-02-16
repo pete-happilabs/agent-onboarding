@@ -1,0 +1,28 @@
+# Testing Framework
+pytest==7.4.4
+pytest-asyncio==0.23.4
+pytest-timeout==2.2.0
+pytest-cov==4.1.0
+pytest-mock==3.12.0
+
+# Async Testing
+anyio==4.2.0
+
+# Ragas for AI Agent Evaluation (flexible versions to avoid conflicts)
+ragas>=0.1.9
+langchain-openai>=0.1.0
+langchain-core>=0.1.33
+
+# Performance Testing
+pytest-benchmark==4.0.0
+
+# Mocking and Fixtures
+responses==0.24.1
+faker==22.6.0
+
+# Validation
+pydantic>=2.6.0
+jsonschema==4.21.1
+
+# Utilities
+python-dotenv==1.0.1
