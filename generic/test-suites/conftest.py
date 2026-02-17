@@ -1,6 +1,5 @@
 """
-Shared pytest fixtures and configuration for DOST agent tests.
-This file is uniform across MCP, Generic, and Custom agents.
+Shared pytest fixtures and configuration for Generic Agent tests.
 """
 import pytest
 import asyncio
@@ -25,16 +24,16 @@ def event_loop_policy():
 
 
 # ============================================================================
-# DOSTEVENT FIXTURES (Universal across all agents)
+# DOSTEVENT FIXTURES (Universal)
 # ============================================================================
 
 @pytest.fixture
 def base_dostevent() -> Dict[str, Any]:
-    """Base dostEvent structure - uniform across all agents"""
+    """Base dostEvent structure"""
     return {
         "version": "00.01.01",
         "sourceEntityId": "hum.user.test123",
-        "destinationEntityId": "agent.test",
+        "destinationEntityId": "agent.generic.test",
         "sessionId": "session-test-uuid-123",
         "isAiGenerated": False,
         "eventHint": "user_message",
@@ -50,7 +49,7 @@ def base_dostevent() -> Dict[str, Any]:
 def search_dostevent(base_dostevent) -> Dict[str, Any]:
     """dostEvent for search queries"""
     event = base_dostevent.copy()
-    event["message"]["text"]["data"] = "Find me restaurants in Bangalore"
+    event["message"]["text"]["data"] = "Find services in Bangalore"
     event["eventHint"] = "search_query"
     return event
 
@@ -59,7 +58,7 @@ def search_dostevent(base_dostevent) -> Dict[str, Any]:
 def booking_dostevent(base_dostevent) -> Dict[str, Any]:
     """dostEvent for booking queries"""
     event = base_dostevent.copy()
-    event["message"]["text"]["data"] = "Book a table for 2 at 7 PM"
+    event["message"]["text"]["data"] = "Book a salon service"
     event["eventHint"] = "booking_request"
     return event
 
@@ -76,10 +75,10 @@ def multi_turn_session() -> str:
 
 @pytest.fixture
 def expected_dostevent_response() -> Dict[str, Any]:
-    """Expected dostEvent response structure - uniform validation"""
+    """Expected dostEvent response structure"""
     return {
         "version": "00.01.01",
-        "sourceEntityId": "agent.test",
+        "sourceEntityId": "agent.generic.test",
         "destinationEntityId": "hum.user.test123",
         "sessionId": "session-test-uuid-123",
         "isAiGenerated": True,
@@ -94,7 +93,7 @@ def expected_dostevent_response() -> Dict[str, Any]:
 
 @pytest.fixture
 def expected_metrics() -> Dict[str, Any]:
-    """Expected DPA format metrics - uniform across all agents"""
+    """Expected DPA format metrics"""
     return {
         "models": {
             "gpt-4o-mini": {
@@ -103,6 +102,56 @@ def expected_metrics() -> Dict[str, Any]:
             }
         }
     }
+
+
+# ============================================================================
+# MOCK GENERIC AGENT FIXTURES
+# ============================================================================
+
+@pytest.fixture
+def mock_domain_config():
+    """Mock domain configuration"""
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).parent.parent))
+    
+    try:
+        from app.config.domain_config import BaseDomainConfig
+        
+        config = BaseDomainConfig(
+            domain_name="test_domain",
+            entity_id="agent.generic.test",
+            system_prompt="You are a test assistant",
+            tools_module="app.domains.urban_company.tools",
+            persistence_collection="test_collection"
+        )
+        return config
+    except ImportError:
+        pytest.skip("Generic app not available")
+
+
+@pytest.fixture
+def mock_generic_agent(mock_domain_config):
+    """Mock GenericReActAgent"""
+    from unittest.mock import MagicMock, AsyncMock
+    
+    agent = MagicMock()
+    
+    # Mock process_message to return expected structure
+    async def mock_process_message(user_message, user_id, **kwargs):
+        return {
+            "response": "Mocked agent response",
+            "state": {
+                "selected_service_id": None,
+                "booking_details": {},
+                "details_shown": False
+            }
+        }
+    
+    agent.process_message = AsyncMock(side_effect=mock_process_message)
+    agent.config = mock_domain_config
+    
+    return agent
 
 
 # ============================================================================
@@ -128,55 +177,6 @@ def mock_openai_client():
     )
     mock_client.chat.completions.create = AsyncMock(return_value=mock_response)
     return mock_client
-
-
-# ============================================================================
-# RAGAS FIXTURES
-# ============================================================================
-
-@pytest.fixture
-def ragas_evaluator_llm():
-    """LLM for Ragas evaluation - can be mocked or real"""
-    try:
-        from langchain_openai import ChatOpenAI
-        return ChatOpenAI(model="gpt-4o-mini", temperature=0)
-    except ImportError:
-        pytest.skip("langchain-openai not installed")
-
-
-@pytest.fixture
-def ragas_sample_interaction():
-    """Sample multi-turn interaction for Ragas evaluation"""
-    try:
-        from ragas.messages import HumanMessage, AIMessage, ToolMessage, ToolCall
-        
-        return [
-            HumanMessage(content="Find me restaurants in Bangalore"),
-            AIMessage(
-                content="Let me search for restaurants in Bangalore.",
-                tool_calls=[
-                    ToolCall(name="restaurant_search", args={"location": "Bangalore"})
-                ]
-            ),
-            ToolMessage(content="Found 10 restaurants: 1. Biryani House, 2. South Indian Delight..."),
-            AIMessage(content="I found 10 restaurants in Bangalore. Would you like details about any specific one?"),
-        ]
-    except ImportError:
-        pytest.skip("ragas not installed")
-
-
-# ============================================================================
-# PERFORMANCE TEST FIXTURES
-# ============================================================================
-
-@pytest.fixture
-def performance_thresholds():
-    """Performance thresholds for latency and token usage tests"""
-    return {
-        "max_latency_seconds": 5.0,
-        "max_tokens_per_request": 2000,
-        "max_concurrent_requests": 10
-    }
 
 
 # ============================================================================
@@ -228,5 +228,4 @@ def dostevent_builder():
 async def cleanup_after_test():
     """Cleanup after each test"""
     yield
-    # Allow pending tasks to complete
     await asyncio.sleep(0.1)
