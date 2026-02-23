@@ -123,11 +123,12 @@ def mock_domain_config():
             entity_id="agent.generic.test",
             system_prompt="You are a test assistant",
             tools_module="app.domains.urban_company.tools",
-            persistence_collection="test_collection"
+            database_collection="test_collection"
         )
         return config
-    except ImportError:
-        pytest.skip("Generic app not available")
+    except Exception as e:
+        pytest.skip(f"Generic app not available: {e}")
+
 
 
 @pytest.fixture

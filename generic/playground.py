@@ -169,7 +169,7 @@ class OmniAgentPlayground:
             if self.verbose:
                 timestamp = datetime.now().strftime("%H:%M:%S")
                 print(f"{Fore.BLUE}{timestamp} | omniagent.playground | Response delivered{Style.RESET_ALL}\n")
-        
+            
         except Exception as e:
             print(f"{Fore.RED}❌ Error processing message: {e}{Style.RESET_ALL}")
             if self.verbose:

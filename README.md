@@ -227,8 +227,8 @@ Every agent speaks dostEvent (version `00.01.01`):
       {
         "title": "Cuisine Results",
         "objects": [
-          { "title": "Butter Chicken", "media": { "images": [...] } },
-          { "title": "Dal Makhani", "media": { "images": [...] } }
+          { "title": "Butter Chicken", "media": { "images": ["..."] } },
+          { "title": "Dal Makhani",    "media": { "images": ["..."] } }
         ]
       }
     ]
@@ -281,7 +281,7 @@ All three ways share the same core pattern:
 │                                                             │
 │  ┌──────────┐    ┌──────────┐    ┌────────────────────────┐ │
 │  │ protocol │    │  agent   │    │   tool source          │ │
-│  │ (dostEvent)│  │ (ReAct)  │    │                        │ │
+│  │(dostEvent)│   │ (ReAct)  │    │                        │ │
 │  │          │    │          │    │  MCP: MCP server       │ │
 │  │  IN/OUT  │◄──►│  OpenAI  │◄──►│  Generic: Database     │ │
 │  │          │    │  LLM     │    │  Custom: REST APIs     │ │
@@ -294,3 +294,116 @@ All three ways share the same core pattern:
    Register in DAS              Host on WebSocket
    (agent discovery)            (client communication)
 ```
+
+---
+
+## 🧪 Test Suites
+
+Production-grade test suites are provided for all three agents.
+
+### Test Coverage
+
+| Agent | Total Tests | Unit | Integration | Contract |
+|-------|-------------|------|-------------|----------|
+| **MCP** | 43 | 37 | 4 | 2 |
+| **Custom** | 42 | 37 | 3 | 2 |
+| **Generic** | 43 | 37 | 4 | 2 |
+| **TOTAL** | **128** | **111** | **11** | **6** |
+
+### Run All Tests
+
+```powershell
+# Activate venv first
+.\venv\Scripts\Activate.ps1
+
+# MCP Agent
+cd mcp\test-suites
+pytest -v
+
+# Custom Agent
+cd ..\..\custom\test-suites
+pytest -v
+
+# Generic Agent
+cd ..\..\generic\test-suites
+pytest -v
+```
+
+### Run by Test Type
+
+```powershell
+pytest -m unit        # Unit tests only
+pytest -m integration # Integration tests only
+pytest -m contract    # Contract tests only
+```
+
+### Test Categories
+
+**Unit Tests (111 tests)**
+- dostEvent protocol validation per DOST spec v00.01.01
+- Error handling and edge cases (missing fields, invalid types)
+- DPA metrics format (token tracking per model)
+- dostEvent parsing and extraction
+
+**Integration Tests (11 tests)**
+- Real `talk()` function — MCP and Custom agents
+- Real `process_message()` — Generic agent
+- End-to-end workflows with mocked LLM and tool dependencies
+
+**Contract Tests (6 tests)**
+- DOST spec v00.01.01 compliance
+- Schema validation (required fields, types, version format)
+
+### Test Structure
+
+```
+agent-onboarding/
+├── mcp/test-suites/
+│   ├── conftest.py                          # Shared fixtures
+│   ├── pytest.ini                           # Pytest config + markers
+│   ├── requirements-test.txt                # Test dependencies
+│   ├── contract/
+│   │   └── test_dostevent_schema.py         # 2 contract tests
+│   ├── integration/
+│   │   └── test_talk_function.py            # 4 integration tests
+│   └── unit/
+│       ├── test_dostevent_parser.py         # Parser unit tests
+│       ├── test_metrics_and_resilience.py   # Metrics unit tests
+│       └── test_protocol_and_errors.py      # Protocol error tests
+│
+├── custom/test-suites/                      # Same structure as MCP
+│   └── ...
+│
+└── generic/test-suites/                     # Same structure, adapted
+    └── integration/
+        └── test_generic_agent.py            # Tests process_message()
+```
+
+### Test Conventions
+
+- **Markers:** `@pytest.mark.unit`, `@pytest.mark.integration`, `@pytest.mark.contract`
+- **Fixtures:** Shared in `conftest.py` per agent
+- **Naming:** `test_*.py` for all test files
+- **Mocking:** Real code imports + mocked external dependencies (LLM, MCP server, REST APIs)
+- **Async:** `@pytest.mark.asyncio` for all async tests
+
+### Environment Setup
+
+```bash
+# Create and activate venv
+python -m venv venv
+.\venv\Scripts\Activate.ps1      # Windows
+source venv/bin/activate          # macOS/Linux
+
+# Install test dependencies per agent
+pip install -r mcp/requirements.txt
+pip install -r mcp/test-suites/requirements-test.txt
+
+pip install -r custom/requirements.txt
+pip install -r custom/test-suites/requirements-test.txt
+
+pip install -r generic/requirements.txt
+pip install -r generic/test-suites/requirements-test.txt
+```
+
+> **Note:** Never commit `.env` files. Copy `.env.example` to `.env` and fill in your keys locally.

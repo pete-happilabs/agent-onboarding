@@ -1,21 +1,13 @@
-# ============================================================================
-# FILE: mcp/engine/talk.py
-# ============================================================================
 """
 MCP Talk Engine - Bridge dostEvent to MCP servers.
 
-This module provides the talk() function that:
-1. Receives a dostEvent
-2. Extracts the user message
-3. Uses ReAct agent (if LLM enabled) to understand NL and call MCP tools
-4. Falls back to simple heuristics if LLM disabled
-5. Returns a dostEvent response
-
-SAME SIGNATURE AS DPA's talk():
-- Input: dostEvent
-- Output: (response_dostEvent, metrics)
+Production additions over original:
+- validate_dost_event()  → rejects malformed input before any processing
+- with_timeout()         → hard 28s cap prevents hung WebSocket connections
+- CircuitBreakerOpen     → user-friendly message when MCP server is down
+- TimeoutError           → user-friendly message on timeout
+- % logging             → replaced f-strings for production log safety
 """
-
 from __future__ import annotations
 
 import logging
@@ -25,50 +17,58 @@ from ..core.protocol import (
     create_dost_event,
     create_dost_message,
     extract_query_text,
+    validate_dost_event,
 )
+from ..core.resilience import with_timeout, CircuitBreakerOpen
 from ..client.mcp_client import initialize_mcp_client
 from ..config import get_settings
 
 logger = logging.getLogger(__name__)
+
+_TALK_TIMEOUT = 28.0  # seconds — less than typical WebSocket/HTTP gateway timeout
 
 
 async def talk(event: Dict[str, Any]) -> Tuple[Dict[str, Any], Dict[str, Any]]:
     """
     Process a talk request - bridges to MCP server.
 
-    SAME SIGNATURE AS DPA's talk():
-    - Input: dostEvent
-    - Output: (response_dostEvent, metrics)
-
     Flow:
-    1. Extract message from dostEvent
-    2. Get MCP client (connect to their server)
-    3. If LLM enabled: Use ReAct agent to understand NL and call tools
-       Else: Fall back to simple heuristics
-    4. Convert response to dostEvent
-    5. Return (response_event, metrics)
-
-    Args:
-        event: Incoming dostEvent dict with message
-
-    Returns:
-        Tuple of (response_dostEvent, metrics)
+    1. Validate incoming dostEvent structure
+    2. Extract message from dostEvent
+    3. Connect to MCP server (circuit breaker inside MCPClient.connect)
+    4. Run ReAct agent or heuristic with hard timeout
+    5. Build response dostEvent
+    6. Return (response_event, metrics)
     """
-    # Extract from dostEvent
+    settings = get_settings()
+    agent_entity_id = settings.agent.entity_id
+
+    # --- 1. Validate input ---
+    try:
+        validate_dost_event(event)
+    except ValueError as exc:
+        logger.warning("Invalid dostEvent received: %s", exc)
+        entity_id = event.get("sourceEntityId", "unknown") if isinstance(event, dict) else "unknown"
+        session_id = event.get("sessionId") if isinstance(event, dict) else None
+        return _build_response(
+            agent_entity_id=agent_entity_id,
+            destination_entity_id=entity_id,
+            session_id=session_id,
+            message_text=f"Invalid request: {exc}",
+            event_hint="error",
+        ), {"models": {}}
+
+    # --- 2. Extract fields ---
     entity_id = event.get("sourceEntityId", "unknown")
     session_id = event.get("sessionId")
     user_message = extract_query_text(event)
 
     logger.info(
-        f"TALK - Entity: {entity_id}, Session: {session_id}, "
-        f"Message: '{user_message[:50] if user_message else ''}...'"
+        "TALK - Entity: %s, Session: %s, Message: '%s...'",
+        entity_id, session_id, (user_message[:50] if user_message else ""),
     )
 
-    # Get settings
-    settings = get_settings()
-    agent_entity_id = settings.agent.entity_id
-
-    # Handle empty message
+    # --- 3. Handle empty message ---
     if not user_message:
         return _build_response(
             agent_entity_id=agent_entity_id,
@@ -77,42 +77,46 @@ async def talk(event: Dict[str, Any]) -> Tuple[Dict[str, Any], Dict[str, Any]]:
             message_text="I didn't catch that. Could you say something?",
         ), {"models": {}}
 
-    # Initialize metrics in DPA format: {"models": {"model_name": {"input_tokens": X, "output_tokens": Y}}}
     metrics: Dict[str, Any] = {"models": {}}
 
     try:
-        # Get and connect MCP client
+        # --- 4. Connect to MCP server (circuit breaker lives inside MCPClient) ---
         client = await initialize_mcp_client()
 
-        # Use ReAct agent if LLM is enabled, otherwise fall back to heuristics
+        # --- 5. Run agent or heuristic with hard timeout ---
         categories = None
         event_hint = "response"
+
         if settings.llm.enabled:
             from ..llm import ReActAgent, build_dost_categories, infer_event_hint
 
             agent = ReActAgent(client, settings)
-            result = await agent.run(user_message)
+
+            result = await with_timeout(
+                agent.run(user_message),
+                timeout=_TALK_TIMEOUT,
+                operation="mcp_agent.run",
+            )
             mcp_response = result.text
 
-            # Track LLM token usage in DPA format
             if result.model and (result.input_tokens > 0 or result.output_tokens > 0):
                 metrics["models"][result.model] = {
                     "input_tokens": result.input_tokens,
-                    "output_tokens": result.output_tokens
+                    "output_tokens": result.output_tokens,
                 }
 
-            # Build dostCategories from tool results (structured data)
             if result.tool_results:
                 categories = build_dost_categories(result.tool_results)
-                # Infer idiomatic event hint from tool names
                 event_hint = infer_event_hint(result.tool_results)
         else:
-            # Fallback to simple heuristics (existing send_message logic)
-            mcp_response = await client.send_message(user_message)
+            mcp_response = await with_timeout(
+                client.send_message(user_message),
+                timeout=_TALK_TIMEOUT,
+                operation="mcp_client.send_message",
+            )
 
-        logger.info(f"TALK - MCP Response: {len(mcp_response)} chars, Metrics: {metrics}")
+        logger.info("TALK - MCP Response: %d chars, Metrics: %s", len(mcp_response), metrics)
 
-        # Build dostEvent response with categories if available
         return _build_response(
             agent_entity_id=agent_entity_id,
             destination_entity_id=entity_id,
@@ -122,15 +126,33 @@ async def talk(event: Dict[str, Any]) -> Tuple[Dict[str, Any], Dict[str, Any]]:
             categories=categories,
         ), metrics
 
-    except Exception as e:
-        logger.exception(f"Talk error: {e}")
-
-        # Return error response
+    except CircuitBreakerOpen as exc:
+        logger.error("Circuit breaker open: %s", exc)
         return _build_response(
             agent_entity_id=agent_entity_id,
             destination_entity_id=entity_id,
             session_id=session_id,
-            message_text=f"Sorry, I encountered an error: {str(e)}",
+            message_text="Service temporarily unavailable. Please try again shortly.",
+            event_hint="error",
+        ), metrics
+
+    except TimeoutError as exc:
+        logger.error("Talk timed out: %s", exc)
+        return _build_response(
+            agent_entity_id=agent_entity_id,
+            destination_entity_id=entity_id,
+            session_id=session_id,
+            message_text="Request timed out. Please try again.",
+            event_hint="error",
+        ), metrics
+
+    except Exception as exc:
+        logger.exception("Talk error: %s", exc)
+        return _build_response(
+            agent_entity_id=agent_entity_id,
+            destination_entity_id=entity_id,
+            session_id=session_id,
+            message_text=f"Sorry, I encountered an error: {exc}",
             event_hint="error",
         ), metrics
 
@@ -143,7 +165,6 @@ def _build_response(
     event_hint: str = "response",
     categories: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
-    """Build a dostEvent response with optional categories."""
     return create_dost_event(
         source_entity_id=agent_entity_id,
         destination_entity_id=destination_entity_id,
