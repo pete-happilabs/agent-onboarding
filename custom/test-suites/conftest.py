@@ -1,6 +1,10 @@
 """
 Shared pytest fixtures and configuration for Custom Agent tests.
 """
+import sys, os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+# ↑ Adds custom/ to sys.path → makes 'app' importable as custom/app/
+
 import pytest
 import asyncio
 from typing import Dict, Any

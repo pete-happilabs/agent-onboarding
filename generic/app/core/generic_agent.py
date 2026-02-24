@@ -1,17 +1,26 @@
 """
 Generic LangGraph-based ReAct agent.
 
-This agent is configured via a domain-specific BaseDomainConfig instance
-so it can be reused across multiple domains (Urban Company, Uber, etc.).
+Production additions over original:
+- _invoke_llm()     → sync retry x3 on LangChain LLM calls (tenacity)
+- collect_metrics() → DPA-format token usage from LangChain usage_metadata
+- Token tracking    → accumulated in _call_model across all ReAct iterations
+- % logging         → replaced f-strings for production log safety
 """
 import importlib
 import logging
-from typing import Dict, Any
+from typing import Any, Dict
 
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 from langchain_openai import ChatOpenAI
 from langgraph.graph import StateGraph, START, END
 from langgraph.prebuilt import ToolNode, tools_condition
+from tenacity import (
+    retry,
+    stop_after_attempt,
+    wait_exponential,
+    before_sleep_log,
+)
 
 from app.config.domain_config import BaseDomainConfig
 from app.models.agent_state import AgentState
@@ -24,24 +33,14 @@ class GenericReActAgent:
     """
     Generic LangGraph-based ReAct agent.
 
-    The agent's behavior is driven entirely by the provided
-    BaseDomainConfig (system prompt, tools module, persistence
-    collection, etc.), while the LangGraph topology remains
-    identical to the original UrbanBot implementation.
+    Behavior is driven entirely by the provided BaseDomainConfig.
+    LangGraph topology is identical across all domains.
     """
 
     def __init__(self, config: BaseDomainConfig):
-        """
-        Initialize the generic agent with a domain configuration.
-
-        Args:
-            config: Domain configuration describing prompt, tools module,
-                    and other domain-level settings.
-        """
         self.config = config
         self.system_prompt: str = config.system_prompt
 
-        # LLM configuration remains the same; only the prompt changes.
         self.llm = ChatOpenAI(
             model=LLMConfig.MODEL_NAME,
             temperature=LLMConfig.TEMPERATURE,
@@ -49,7 +48,6 @@ class GenericReActAgent:
             timeout=LLMConfig.TIMEOUT,
         )
 
-        # Dynamic tool loading: each domain exposes a TOOLS list
         tools_module = importlib.import_module(config.tools_module)
         self.tools = getattr(tools_module, "TOOLS")
 
@@ -57,50 +55,80 @@ class GenericReActAgent:
         self.graph = self._build_graph()
         self.conversation_history: Dict[str, list] = {}
 
+        # Token tracking — reset per process_message() call
+        self._input_tokens: int = 0
+        self._output_tokens: int = 0
+
         logger.info("GenericReActAgent initialized for domain=%s", self.config.domain_name)
 
+    # -------------------------------------------------------------------------
+    # Graph
+    # -------------------------------------------------------------------------
+
     def _build_graph(self) -> StateGraph:
-        """Build the LangGraph workflow (unchanged topology)."""
         workflow = StateGraph(AgentState)
 
         workflow.add_node("agent", self._call_model)
         workflow.add_node("tools", ToolNode(self.tools))
 
         workflow.add_edge(START, "agent")
-        workflow.add_conditional_edges("agent", tools_condition, {"tools": "tools", END: END})
+        workflow.add_conditional_edges(
+            "agent", tools_condition, {"tools": "tools", END: END}
+        )
         workflow.add_edge("tools", "agent")
 
         return workflow.compile()
 
+    # -------------------------------------------------------------------------
+    # LLM invocation — retry wraps this sync call
+    # -------------------------------------------------------------------------
+
+    def _invoke_llm(self, messages_to_send: list) -> Any:
+        """
+        Invoke the LLM with sync retry on transient failures.
+
+        LangGraph calls _call_model synchronously, so we use tenacity's
+        sync retry here (not async). Retries up to 3 times: 1s→2s→4s backoff.
+        """
+        @retry(
+            stop=stop_after_attempt(3),
+            wait=wait_exponential(multiplier=1, min=1, max=8),
+            before_sleep=before_sleep_log(logger, logging.WARNING),
+            reraise=True,
+        )
+        def _inner():
+            return self.llm_with_tools.invoke(messages_to_send)
+
+        return _inner()
+
+    # -------------------------------------------------------------------------
+    # Graph node
+    # -------------------------------------------------------------------------
+
     def _call_model(self, state: AgentState) -> Dict[str, Any]:
-        """Process state and call the configured LLM."""
+        """Process state and call the LLM — called synchronously by LangGraph."""
         from datetime import datetime, timedelta
 
-        # Build context
         context_parts = [self.system_prompt]
 
-        # Add date info
         today = datetime.now()
         tomorrow = today + timedelta(days=1)
         context_parts.append(f"\nToday: {today.strftime('%d-%m-%Y')}")
         context_parts.append(f"Tomorrow: {tomorrow.strftime('%d-%m-%Y')}")
 
-        # Add domain + user identifiers
         if state.get("user_id"):
-            # Expose both domain entity_id and user_id to the prompt
             context_parts.append(f"\nENTITY_ID: {self.config.entity_id}")
             context_parts.append(f"USER_ID: {state['user_id']}")
 
-        # Add selected service (domain-specific but still useful metadata)
         if state.get("selected_service_id"):
             context_parts.append(f"\nCURRENT SERVICE: {state['selected_service_id']}")
 
-        # Add customer profile
         if state.get("customer_profile"):
             profile = state["customer_profile"]
-            context_parts.append(f"\nCustomer: {profile.get('name')}, {profile.get('phone')}")
+            context_parts.append(
+                f"\nCustomer: {profile.get('name')}, {profile.get('phone')}"
+            )
 
-        # Add metadata for service filtering
         if state.get("metadata"):
             metadata = state["metadata"]
             logger.info("=== AGENT RECEIVED METADATA ===")
@@ -109,7 +137,8 @@ class GenericReActAgent:
             if metadata.get("category"):
                 logger.info("  Category filter: %s", metadata["category"])
                 context_parts.append(
-                    f"  - Category: {metadata['category']} (ONLY show services in this category)"
+                    f"  - Category: {metadata['category']} "
+                    "(ONLY show services in this category)"
                 )
             if metadata.get("location"):
                 location = metadata["location"]
@@ -119,7 +148,9 @@ class GenericReActAgent:
                     "(ONLY show services available in this city)"
                 )
                 if location.get("coordinates"):
-                    context_parts.append(f"  - Coordinates: {location['coordinates']}")
+                    context_parts.append(
+                        f"  - Coordinates: {location['coordinates']}"
+                    )
             context_parts.append(
                 "IMPORTANT: When listing or searching services, "
                 "ALWAYS pass the city parameter to filter results."
@@ -127,16 +158,21 @@ class GenericReActAgent:
         else:
             logger.info("=== AGENT: NO METADATA IN STATE ===")
 
-        # Track booking progress
         if state.get("details_shown"):
             context_parts.append("\nService details shown. Ready for booking info.")
 
         system_message = SystemMessage(content="\n".join(context_parts))
         messages_to_send = [system_message] + list(state["messages"])
 
-        response = self.llm_with_tools.invoke(messages_to_send)
+        # --- LLM call with retry ---
+        response = self._invoke_llm(messages_to_send)
 
-        # Track state changes
+        # --- Token tracking ---
+        if hasattr(response, "usage_metadata") and response.usage_metadata:
+            um = response.usage_metadata
+            self._input_tokens += um.get("input_tokens", 0)
+            self._output_tokens += um.get("output_tokens", 0)
+
         updated_service_id = state.get("selected_service_id")
         details_shown = state.get("details_shown", False)
 
@@ -155,6 +191,37 @@ class GenericReActAgent:
 
         return result
 
+    # -------------------------------------------------------------------------
+    # Metrics
+    # -------------------------------------------------------------------------
+
+    def collect_metrics(self) -> Dict[str, Any]:
+        """
+        Return accumulated LLM token usage in DPA format, then reset.
+
+        Call this once after process_message() returns.
+        Returns {"models": {}} if no tokens were tracked (e.g. mock LLM).
+        """
+        if not (self._input_tokens or self._output_tokens):
+            return {"models": {}}
+
+        metrics = {
+            "models": {
+                LLMConfig.MODEL_NAME: {
+                    "input_tokens": self._input_tokens,
+                    "output_tokens": self._output_tokens,
+                }
+            }
+        }
+        # Reset for next call
+        self._input_tokens = 0
+        self._output_tokens = 0
+        return metrics
+
+    # -------------------------------------------------------------------------
+    # Public interface
+    # -------------------------------------------------------------------------
+
     async def process_message(
         self,
         user_message: str,
@@ -163,21 +230,20 @@ class GenericReActAgent:
         previous_state: Dict[str, Any] | None = None,
         metadata: Dict[str, Any] | None = None,
     ) -> Dict[str, Any]:
-        """
-        Process a user message and return the AI response.
-
-        This mirrors the original UrbanBotAgent.process_message behavior,
-        but uses the injected domain configuration and dynamically loaded tools.
-        """
+        """Process a user message and return the AI response."""
         try:
-            # Manage conversation history
+            # Reset token counters for this request
+            self._input_tokens = 0
+            self._output_tokens = 0
+
             if user_id not in self.conversation_history:
                 self.conversation_history[user_id] = []
 
-            self.conversation_history[user_id].append(HumanMessage(content=user_message))
-            messages = self.conversation_history[user_id][-10:]  # Keep last 10
+            self.conversation_history[user_id].append(
+                HumanMessage(content=user_message)
+            )
+            messages = self.conversation_history[user_id][-10:]
 
-            # Build initial state
             initial_state: Dict[str, Any] = {
                 "messages": messages,
                 "user_id": user_id,
@@ -194,10 +260,8 @@ class GenericReActAgent:
                 "metadata": metadata,
             }
 
-            # Run graph
             result = self.graph.invoke(initial_state)
 
-            # Extract response
             ai_messages = [m for m in result["messages"] if isinstance(m, AIMessage)]
             if ai_messages:
                 final_message = ai_messages[-1]
@@ -221,4 +285,3 @@ class GenericReActAgent:
                 "response": "I encountered an error. Please try again.",
                 "state": previous_state or {},
             }
-

@@ -1,6 +1,9 @@
 """
 Shared pytest fixtures and configuration for Generic Agent tests.
 """
+import sys, os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+# ↑ Adds generic/ to sys.path → makes 'app' importable as generic/app/
 import pytest
 import asyncio
 from typing import Dict, Any

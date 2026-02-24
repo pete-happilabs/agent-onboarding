@@ -374,6 +374,32 @@ def create_dost_location(
 # =============================================================================
 # DAS Helpers
 # =============================================================================
+# =============================================================================
+# Validation
+# =============================================================================
+
+def validate_dost_event(event: Dict[str, Any]) -> None:
+    """
+    Validate required fields of an incoming dostEvent per spec v00.01.01.
+
+    Raises:
+        ValueError: if the event is missing required fields or has wrong type.
+    """
+    if not isinstance(event, dict):
+        raise ValueError("dostEvent must be a dict")
+    if not event.get("sourceEntityId"):
+        raise ValueError("dostEvent missing required field: sourceEntityId")
+    if not event.get("sessionId"):
+        raise ValueError("dostEvent missing required field: sessionId")
+
+    version = event.get("version")
+    if version and version != DOST_SPEC_VERSION:
+        import logging as _log
+        _log.getLogger(__name__).warning(
+            "dostEvent version mismatch: got %s, expected %s",
+            version, DOST_SPEC_VERSION,
+        )
+
 def create_response_event(
     source_entity_id: str,
     destination_entity_id: Optional[str],
