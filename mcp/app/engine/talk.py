@@ -13,17 +13,17 @@ from __future__ import annotations
 import logging
 from typing import Any, Dict, Optional, Tuple
 
-from ..core.protocol import (
+from app.core.protocol import (
     create_dost_event,
     create_dost_message,
     extract_query_text,
     validate_dost_event,
 )
-from ..core.resilience import with_timeout, CircuitBreakerOpen
-from ..client.mcp_client import initialize_mcp_client
-from ..config import get_settings
+from app.core.resilience import with_timeout, CircuitBreakerOpen
+from app.client.mcp_client import initialize_mcp_client
+from app.config import get_settings
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)   # ← ADD THIS LINE BACK
 
 _TALK_TIMEOUT = 28.0  # seconds — less than typical WebSocket/HTTP gateway timeout
 
