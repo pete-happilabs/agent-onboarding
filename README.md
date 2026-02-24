@@ -296,6 +296,99 @@ All three ways share the same core pattern:
 ```
 
 ---
+---
+
+## 🛡️ Resilience
+
+All three agents are production-hardened with the same resilience layer:
+
+dostEvent
+│
+▼
+validate_dost_event() ← Rejects malformed input before any processing
+│
+▼
+with_timeout(agent.run()) ← Hard cap prevents hung WebSocket connections
+│
+├── LLM calls ← Retry ×3 with exponential backoff
+│
+└── External calls ← AsyncCircuitBreaker
+CLOSED → calls pass through
+OPEN → CircuitBreakerOpen → "Service unavailable" (user-facing)
+HALF_OPEN → probe after recovery_timeout
+
+
+### Input Validation
+
+Every `talk()` validates the incoming dostEvent before touching any LLM or tool:
+
+```python
+validate_dost_event(event)   # raises ValueError if sourceEntityId or sessionId missing
+
+Invalid events get a structured error dostEvent back immediately — no LLM call is made.
+
+Hard Timeouts
+| Agent   | Timeout | Reason                                      |
+| ------- | ------- | ------------------------------------------- |
+| Custom  | 28s     | Less than typical WebSocket gateway timeout |
+| MCP     | 28s     | MCP server calls can hang indefinitely      |
+| Generic | 55s     | LangGraph ReAct loops can be multi-step     |
+
+Retry Logic
+LLM API calls (OpenAI / LangChain) are retried up to 3 times with exponential backoff on any transient failure (rate limits, 500s, network blips):
+Attempt 1 → fail → wait 1s
+Attempt 2 → fail → wait 2s
+Attempt 3 → fail → wait 4s (capped at 8s)
+Attempt 4 → reraise
+
+Circuit Breaker
+External service calls (REST APIs in Custom, MCP connect/call in MCP) are protected by AsyncCircuitBreaker:
+| Parameter         | Custom REST | MCP Connect | MCP Call |
+| ----------------- | ----------- | ----------- | -------- |
+| failure_threshold | 5           | 3           | 5        |
+| recovery_timeout  | 30s         | 60s         | 30s      |
+
+MCP connect has a lower threshold (3) and longer recovery (60s) because an MCP server going down is a harder failure than a single tool call failing.
+
+When a circuit is OPEN, the user receives:
+"Service temporarily unavailable. Please try again shortly."
+— never a raw Python exception.
+
+Resilience Files
+custom/app/core/resilience.py    ← AsyncCircuitBreaker, with_timeout, llm_retry
+mcp/app/core/resilience.py       ← identical
+generic/app/core/resilience.py   ← identical
+
+***
+
+## Also Update Test Structure Block
+
+Replace the existing test structure tree with:
+
+```markdown
+agent-onboarding/
+├── mcp/test-suites/
+│ ├── conftest.py
+│ ├── pytest.ini
+│ ├── requirements-test.txt
+│ ├── contract/
+│ │ └── test_dostevent_schema.py # 2 contract tests
+│ ├── integration/
+│ │ └── test_talk_function.py # 4 integration tests
+│ └── unit/
+│ ├── test_dostevent_parser.py
+│ ├── test_metrics_and_resilience.py
+│ ├── test_protocol_and_errors.py
+│ └── test_resilience.py # 28 resilience tests ← NEW
+│
+├── custom/test-suites/ # Same structure as MCP
+│ └── unit/
+│ └── test_resilience.py # 36 resilience tests ← NEW
+│
+└── generic/test-suites/
+└── unit/
+└── test_resilience.py # 28 resilience tests ← NEW
+undefined
 
 ## 🧪 Test Suites
 
@@ -305,10 +398,11 @@ Production-grade test suites are provided for all three agents.
 
 | Agent | Total Tests | Unit | Integration | Contract |
 |-------|-------------|------|-------------|----------|
-| **MCP** | 43 | 37 | 4 | 2 |
-| **Custom** | 42 | 37 | 3 | 2 |
-| **Generic** | 43 | 37 | 4 | 2 |
-| **TOTAL** | **128** | **111** | **11** | **6** |
+| **MCP** | 71 | 65 | 4 | 2 |
+| **Custom** | 78 | 72 | 3 | 2 |
+| **Generic** | 71 | 65 | 4 | 2 |
+| **TOTAL** | **220** | **202** | **11** | **6** |
+
 
 ### Run All Tests
 
