@@ -25,7 +25,7 @@ Structure Index (per spec):
 from datetime import datetime, timezone
 import uuid
 from typing import List, Optional, Dict, Any
-
+import re
 
 # =============================================================================
 # Constants
@@ -381,23 +381,25 @@ def create_dost_location(
 def validate_dost_event(event: Dict[str, Any]) -> None:
     """
     Validate required fields of an incoming dostEvent per spec v00.01.01.
-
-    Raises:
-        ValueError: if the event is missing required fields or has wrong type.
+    Raises ValueError if the event is missing required fields or has invalid format.
     """
     if not isinstance(event, dict):
         raise ValueError("dostEvent must be a dict")
     if not event.get("sourceEntityId"):
         raise ValueError("dostEvent missing required field: sourceEntityId")
-    if not event.get("sessionId"):
+    session_id = event.get("sessionId")
+    if not session_id:
         raise ValueError("dostEvent missing required field: sessionId")
-
+    if not re.match(
+        r'^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$',
+        session_id, re.I
+    ):
+        raise ValueError(f"dostEvent sessionId must be a valid UUID v1-v5: '{session_id}'")
     version = event.get("version")
     if version and version != DOST_SPEC_VERSION:
         import logging as _log
         _log.getLogger(__name__).warning(
-            "dostEvent version mismatch: got %s, expected %s",
-            version, DOST_SPEC_VERSION,
+            "dostEvent version mismatch: got %s, expected %s", version, DOST_SPEC_VERSION
         )
 
 def create_response_event(

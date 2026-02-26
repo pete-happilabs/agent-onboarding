@@ -11,7 +11,9 @@ Production additions over original:
 from __future__ import annotations
 
 import logging
-from typing import Any, Dict, Optional, Tuple
+import time
+from collections import defaultdict
+from typing import Any, Dict, Optional, Tuple, Dict as _Dict
 
 from app.core.protocol import (
     create_dost_event,
@@ -26,6 +28,24 @@ from app.config import get_settings
 logger = logging.getLogger(__name__)   # ← ADD THIS LINE BACK
 
 _TALK_TIMEOUT = 28.0  # seconds — less than typical WebSocket/HTTP gateway timeout
+
+_RATE_BUCKETS: _Dict[str, _Dict[str, float]] = defaultdict(
+    lambda: {"tokens": 10.0, "last_refill": time.monotonic()}
+)
+_RATE_LIMIT_CAPACITY = 10.0
+_RATE_LIMIT_REFILL_RATE = 10.0 / 60.0
+
+
+def _check_rate_limit(session_id: str) -> bool:
+    bucket = _RATE_BUCKETS[session_id]
+    now = time.monotonic()
+    elapsed = now - bucket["last_refill"]
+    bucket["tokens"] = min(_RATE_LIMIT_CAPACITY, bucket["tokens"] + elapsed * _RATE_LIMIT_REFILL_RATE)
+    bucket["last_refill"] = now
+    if bucket["tokens"] >= 1.0:
+        bucket["tokens"] -= 1.0
+        return True
+    return False
 
 
 async def talk(event: Dict[str, Any]) -> Tuple[Dict[str, Any], Dict[str, Any]]:
@@ -61,6 +81,16 @@ async def talk(event: Dict[str, Any]) -> Tuple[Dict[str, Any], Dict[str, Any]]:
     # --- 2. Extract fields ---
     entity_id = event.get("sourceEntityId", "unknown")
     session_id = event.get("sessionId")
+
+    if session_id and not _check_rate_limit(session_id):
+        logger.warning("Rate limit exceeded — session: %s", session_id)
+        return _build_response(
+            agent_entity_id=agent_entity_id,
+            destination_entity_id=entity_id,
+            session_id=session_id,
+            message_text="Too many requests. Please wait a moment before trying again.",
+            event_hint="error",
+        ), {"models": {}}
     user_message = extract_query_text(event)
 
     logger.info(

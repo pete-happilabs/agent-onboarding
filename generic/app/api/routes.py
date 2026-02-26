@@ -26,6 +26,29 @@ from app.core.protocol import (
 )
 
 
+logger = logging.getLogger(__name__)
+
+router = APIRouter()
+
+_agent: Optional[UrbanBotAgent] = None
+
+
+def set_agent(agent: UrbanBotAgent) -> None:
+    """Set the agent instance for routes."""
+    global _agent
+    _agent = agent
+
+
+@router.get("/health")
+async def health():
+    """Health check endpoint for load balancers and monitoring."""
+    return {
+        "status": "healthy",
+        "agent": "generic",
+        "ready": _agent is not None
+    }
+
+
 # =============================================================================
 # DOST Protocol Models
 # =============================================================================
@@ -51,21 +74,6 @@ class DostResponse(BaseModel):
     """Response wrapper with dostEvent and metrics."""
     event: Dict[str, Any]
     metrics: Dict[str, Any]
-
-
-logger = logging.getLogger(__name__)
-
-router = APIRouter()
-
-# Agent instance (initialized in main.py)
-_agent: Optional[UrbanBotAgent] = None
-
-
-def set_agent(agent: UrbanBotAgent) -> None:
-    """Set the agent instance for routes."""
-    global _agent
-    _agent = agent
-
 
 # =============================================================================
 # Service to DOST Object Converter

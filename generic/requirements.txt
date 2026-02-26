@@ -10,3 +10,6 @@ python-dotenv
 langgraph
 motor
 pymongo
+aioredis>=2.0.1
+
+fastapi>=0.111.0

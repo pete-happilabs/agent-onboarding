@@ -10,7 +10,9 @@ Additions over original:
 from __future__ import annotations
 
 import logging
-from typing import Any, Dict, Tuple
+import time
+from collections import defaultdict
+from typing import Any, Dict, Tuple, Dict as _Dict
 
 from ..core.protocol import (
     create_dost_event,
@@ -29,6 +31,24 @@ logger = logging.getLogger(__name__)
 
 _TALK_TIMEOUT = 28.0  # seconds — less than typical WebSocket/HTTP gateway timeout
 
+_RATE_BUCKETS: _Dict[str, _Dict[str, float]] = defaultdict(
+    lambda: {"tokens": 10.0, "last_refill": time.monotonic()}
+)
+_RATE_LIMIT_CAPACITY = 10.0
+_RATE_LIMIT_REFILL_RATE = 10.0 / 60.0
+
+
+def _check_rate_limit(session_id: str) -> bool:
+    bucket = _RATE_BUCKETS[session_id]
+    now = time.monotonic()
+    elapsed = now - bucket["last_refill"]
+    bucket["tokens"] = min(_RATE_LIMIT_CAPACITY, bucket["tokens"] + elapsed * _RATE_LIMIT_REFILL_RATE)
+    bucket["last_refill"] = now
+    if bucket["tokens"] >= 1.0:
+        bucket["tokens"] -= 1.0
+        return True
+    return False
+
 
 async def talk(event: Dict[str, Any]) -> Tuple[Dict[str, Any], Dict[str, Any]]:
     """
@@ -43,6 +63,7 @@ async def talk(event: Dict[str, Any]) -> Tuple[Dict[str, Any], Dict[str, Any]]:
     6. Return (dostEvent, metrics)
     """
     settings = get_settings()
+    metrics = TalkMetrics()
 
     # --- 1. Validate input ---
     try:
@@ -56,7 +77,7 @@ async def talk(event: Dict[str, Any]) -> Tuple[Dict[str, Any], Dict[str, Any]]:
             session_id=session_id,
             error_message=f"Invalid request: {exc}",
             source_entity_id=settings.agent.entity_id,
-        ), TalkMetrics().to_dict()
+        ), metrics.to_dict()
 
     # --- 2. Extract fields ---
     entity_id = event.get("sourceEntityId", "unknown")
@@ -68,7 +89,14 @@ async def talk(event: Dict[str, Any]) -> Tuple[Dict[str, Any], Dict[str, Any]]:
         entity_id, session_id, (user_message[:50] if user_message else ""),
     )
 
-    metrics = TalkMetrics()
+    if session_id and not _check_rate_limit(session_id):
+        logger.warning("Rate limit exceeded — session: %s", session_id)
+        return _build_error_response(
+            entity_id=entity_id,
+            session_id=session_id,
+            error_message="Too many requests. Please wait a moment before trying again.",
+            source_entity_id=settings.agent.entity_id,
+        ), metrics.to_dict()
 
     # --- 3. Handle empty message ---
     if not user_message:

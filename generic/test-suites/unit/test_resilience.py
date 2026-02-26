@@ -297,7 +297,7 @@ class TestValidateDostEvent:
         event = {
             "version": DOST_SPEC_VERSION,
             "sourceEntityId": "hum.user.123",
-            "sessionId": "session-abc",
+            "sessionId": "123e4567-e89b-12d3-a456-426614174000",
             "message": {"text": {"data": "hello"}},
         }
         validate_dost_event(event)  # must not raise
@@ -315,7 +315,7 @@ class TestValidateDostEvent:
     @pytest.mark.unit
     def test_rejects_missing_source_entity_id(self):
         event = {
-            "sessionId": "session-abc",
+            "sessionId": "123e4567-e89b-12d3-a456-426614174000",
             "message": {"text": {"data": "hello"}},
         }
         with pytest.raises(ValueError, match="sourceEntityId"):
@@ -325,7 +325,7 @@ class TestValidateDostEvent:
     def test_rejects_empty_source_entity_id(self):
         event = {
             "sourceEntityId": "",
-            "sessionId": "session-abc",
+            "sessionId": "123e4567-e89b-12d3-a456-426614174000",
             "message": {"text": {"data": "hello"}},
         }
         with pytest.raises(ValueError, match="sourceEntityId"):
@@ -355,7 +355,7 @@ class TestValidateDostEvent:
         event = {
             "version": "99.99.99",
             "sourceEntityId": "hum.user.123",
-            "sessionId": "session-abc",
+            "sessionId": "123e4567-e89b-12d3-a456-426614174000",
             "message": {"text": {"data": "hello"}},
         }
         validate_dost_event(event)  # warns only, must not raise
@@ -364,7 +364,7 @@ class TestValidateDostEvent:
     def test_missing_version_field_passes(self):
         event = {
             "sourceEntityId": "hum.user.123",
-            "sessionId": "session-abc",
+            "sessionId": "123e4567-e89b-12d3-a456-426614174000",
             "message": {"text": {"data": "hello"}},
         }
         validate_dost_event(event)  # version is optional

@@ -37,7 +37,7 @@ def base_dostevent() -> Dict[str, Any]:
         "version": "00.01.01",
         "sourceEntityId": "hum.user.test123",
         "destinationEntityId": "agent.generic.test",
-        "sessionId": "session-test-uuid-123",
+        "sessionId": "123e4567-e89b-12d3-a456-426614174000",
         "isAiGenerated": False,
         "eventHint": "user_message",
         "message": {
@@ -69,7 +69,7 @@ def booking_dostevent(base_dostevent) -> Dict[str, Any]:
 @pytest.fixture
 def multi_turn_session() -> str:
     """Session ID for multi-turn conversation tests"""
-    return "session-multi-turn-test-456"
+    return "123e4567-e89b-12d3-a456-426614174001"
 
 
 # ============================================================================
@@ -83,7 +83,7 @@ def expected_dostevent_response() -> Dict[str, Any]:
         "version": "00.01.01",
         "sourceEntityId": "agent.generic.test",
         "destinationEntityId": "hum.user.test123",
-        "sessionId": "session-test-uuid-123",
+        "sessionId": "123e4567-e89b-12d3-a456-426614174000",
         "isAiGenerated": True,
         "eventHint": "response",
         "message": {
