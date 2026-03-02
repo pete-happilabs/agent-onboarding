@@ -15,13 +15,15 @@ import time
 from collections import defaultdict
 from typing import Any, Dict, Optional, Tuple, Dict as _Dict
 
-from app.core.protocol import (
+import sys as _sys, os as _os
+_sys.path.insert(0, _os.path.abspath(_os.path.join(_os.path.dirname(__file__), "../../..")))
+from shared.protocol import (
     create_dost_event,
     create_dost_message,
     extract_query_text,
     validate_dost_event,
 )
-from app.core.resilience import with_timeout, CircuitBreakerOpen
+from shared.shared_breaker import with_timeout, CircuitBreakerOpen
 from app.client.mcp_client import initialize_mcp_client
 from app.config import get_settings
 

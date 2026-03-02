@@ -29,7 +29,10 @@ from tenacity import (
 
 from .prompts import get_prompt
 from .tool_converter import tools_to_openai_format
-from ..core.resilience import CircuitBreakerOpen
+import sys as _sys, os as _os
+_sys.path.insert(0, _os.path.abspath(_os.path.join(_os.path.dirname(__file__), "../../..")))
+from shared.shared_breaker import CircuitBreakerOpen
+
 
 if TYPE_CHECKING:
     from ..custom.client import CustomClient

@@ -14,13 +14,15 @@ import time
 from collections import defaultdict
 from typing import Any, Dict, Tuple
 
-from app.core.protocol import (
+import sys as _sys, os as _os
+_sys.path.insert(0, _os.path.abspath(_os.path.join(_os.path.dirname(__file__), "../../..")))
+from shared.protocol import (
     create_dost_event,
     create_dost_message,
     extract_query_text,
     validate_dost_event,
 )
-from app.core.resilience import with_timeout
+from shared.shared_breaker import with_timeout
 from app.agent.urban_agent import UrbanBotAgent
 from app.config import get_settings
 

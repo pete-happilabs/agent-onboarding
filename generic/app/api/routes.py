@@ -12,17 +12,18 @@ from pydantic import BaseModel
 from app.agent.urban_agent import UrbanBotAgent
 from app.core.database import get_mongodb
 from app.core.vector_store import get_vector_store
-from app.core.protocol import (
+import sys as _sys, os as _os
+_sys.path.insert(0, _os.path.abspath(_os.path.join(_os.path.dirname(__file__), "../../..")))
+from shared.protocol import (
     create_dost_event,
     create_dost_message,
     create_dost_object,
+    create_dost_pricing,
+    create_dost_action,
+    create_dost_location,
     create_dost_category,
     create_dost_categories,
-    create_dost_pricing,
-    create_dost_location,
-    create_dost_action,
     extract_query_text,
-    DOST_SPEC_VERSION
 )
 
 

@@ -14,14 +14,17 @@ import time
 from collections import defaultdict
 from typing import Any, Dict, Tuple, Dict as _Dict
 
-from ..core.protocol import (
+import sys as _sys, os as _os
+_sys.path.insert(0, _os.path.abspath(_os.path.join(_os.path.dirname(__file__), "../../..")))
+from shared.protocol import (
     create_dost_event,
     create_dost_message,
     extract_query_text,
     validate_dost_event,
 )
+from shared.shared_breaker import with_timeout, CircuitBreakerOpen
+
 from ..core.metrics import TalkMetrics
-from ..core.resilience import with_timeout, CircuitBreakerOpen
 from ..custom.client import CustomClient
 from ..llm.agent import ReActAgent
 from ..llm.response_formatter import build_dost_categories, infer_event_hint

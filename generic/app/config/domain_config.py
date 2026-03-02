@@ -7,8 +7,8 @@ concrete implementation for the Urban Company domain.
 """
 from typing import Dict, Literal, Optional
 
+from pydantic import ConfigDict, Field
 from pydantic_settings import BaseSettings
-from pydantic import Field
 
 
 class BaseDomainConfig(BaseSettings):
@@ -19,6 +19,8 @@ class BaseDomainConfig(BaseSettings):
     Uber, Swiggy). All fields are designed to be serializable and safe to
     load from environment variables or configuration files.
     """
+
+    model_config = ConfigDict(env_prefix="DOMAIN_", case_sensitive=False)
 
     domain_name: str = Field(..., description="Short slug for the domain (e.g. 'urban_company').")
     system_prompt: str = Field(..., description="Primary system prompt used to steer the agent.")
@@ -50,12 +52,6 @@ class BaseDomainConfig(BaseSettings):
         default=None,
         description="Base URL for real external APIs when api_mode='real'.",
     )
-
-    class Config:
-        """Pydantic configuration for environment-based loading."""
-
-        env_prefix = "DOMAIN_"
-        case_sensitive = False
 
     def validate(self) -> bool:
         """
@@ -124,4 +120,3 @@ REMEMBER:
 """
     tools_module: str = "app.domains.urban_company.tools"
     database_collection: str = "services"
-
