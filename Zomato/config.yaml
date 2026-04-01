@@ -1,0 +1,111 @@
+# ============================================================================
+# Zomato Food Discovery Agent Configuration (Custom REST API Template)
+# ============================================================================
+#
+# Uses TheMealDB free API for food/recipe search functionality.
+# NO API KEY REQUIRED - works immediately!
+#
+# API Documentation: https://www.themealdb.com/api.php
+#
+# ============================================================================
+
+service:
+  name: "zomato"
+  base_url: "https://www.themealdb.com/api/json/v1/1"
+
+agent:
+  prompt_name: "food_delivery"
+
+auth:
+  type: "none"  # Free API, no authentication needed
+
+tools:
+  - name: "search_food"
+    description: "Search for food items and dishes by name"
+    endpoint: "/search.php"
+    method: "GET"
+    parameters:
+      - name: "s"
+        type: "string"
+        required: true
+        description: "Dish or food name to search for (e.g., 'biryani', 'pizza', 'pasta')"
+        in: "query"
+    response_mapping:
+      items_path: "meals"
+      title_field: "strMeal"
+      description_field: "strInstructions"
+      image_field: "strMealThumb"
+      category_title: "Food Items"
+
+  - name: "browse_by_category"
+    description: "Browse food by category (e.g., Seafood, Vegetarian, Dessert, Breakfast)"
+    endpoint: "/filter.php"
+    method: "GET"
+    parameters:
+      - name: "c"
+        type: "string"
+        required: true
+        description: "Food category (Beef, Chicken, Dessert, Lamb, Pasta, Pork, Seafood, Side, Starter, Vegan, Vegetarian, Breakfast, Goat, Miscellaneous)"
+        in: "query"
+    response_mapping:
+      items_path: "meals"
+      title_field: "strMeal"
+      image_field: "strMealThumb"
+      category_title: "Category Results"
+
+  - name: "browse_by_cuisine"
+    description: "Browse food by cuisine type (e.g., Indian, Italian, Chinese, Mexican)"
+    endpoint: "/filter.php"
+    method: "GET"
+    parameters:
+      - name: "a"
+        type: "string"
+        required: true
+        description: "Cuisine type (American, British, Chinese, Egyptian, French, Greek, Indian, Italian, Japanese, Malaysian, Mexican, Moroccan, Spanish, Thai, Turkish, Vietnamese)"
+        in: "query"
+    response_mapping:
+      items_path: "meals"
+      title_field: "strMeal"
+      image_field: "strMealThumb"
+      category_title: "Cuisine Results"
+
+  - name: "get_dish_details"
+    description: "Get full details of a specific dish including ingredients and instructions"
+    endpoint: "/lookup.php"
+    method: "GET"
+    parameters:
+      - name: "i"
+        type: "string"
+        required: true
+        description: "Dish ID"
+        in: "query"
+    response_mapping:
+      items_path: "meals"
+      title_field: "strMeal"
+      description_field: "strInstructions"
+      image_field: "strMealThumb"
+      category_title: "Dish Details"
+
+  - name: "surprise_me"
+    description: "Get a random food recommendation"
+    endpoint: "/random.php"
+    method: "GET"
+    parameters: []
+    response_mapping:
+      items_path: "meals"
+      title_field: "strMeal"
+      description_field: "strInstructions"
+      image_field: "strMealThumb"
+      category_title: "Chef's Pick"
+
+  - name: "list_all_categories"
+    description: "List all available food categories with descriptions"
+    endpoint: "/categories.php"
+    method: "GET"
+    parameters: []
+    response_mapping:
+      items_path: "categories"
+      title_field: "strCategory"
+      description_field: "strCategoryDescription"
+      image_field: "strCategoryThumb"
+      category_title: "Food Categories"

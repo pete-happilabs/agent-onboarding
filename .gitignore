@@ -1,48 +1,35 @@
 # Python
 __pycache__/
 *.py[cod]
-*$py.class
-*.so
-.Python
-venv/
-env/
-ENV/
 *.egg-info/
 dist/
 build/
+*.egg
 
-# IDEs
+# Environment
+.env
+*.env
+
+# Virtual environments
+venv/
+.venv/
+
+# IDE
 .vscode/
 .idea/
 *.swp
 *.swo
-*~
-
-# OS
 .DS_Store
-Thumbs.db
 
-# Environment files
-.env
-.env.local
+# Vector store data (generated, not source)
+**/data/vector_store/
 
-# Test coverage
-.coverage
-htmlcov/
-.pytest_cache/
-.tox/
+# Node modules (MCP server deps)
+node_modules/
+package-lock.json
+
+# MongoDB data
+data/db/
 
 # Logs
 *.log
-
-# Database
-*.db
-*.sqlite
-*.sqlite3
-
-# MCP specific
-mcp/.mcp-auth/
-~/.mcp-auth/
-
-# Node modules (if any)
-node_modules/

@@ -20,8 +20,8 @@ from app.core.resilience import (
     CircuitState,
     with_timeout,
 )
-from app.core.protocol import validate_dost_event, DOST_SPEC_VERSION
-from app.core.metrics import TalkMetrics
+from dost.protocol import validate_dost_event, DOST_SPEC_VERSION
+from dost.metrics import TalkMetrics
 
 
 # =============================================================================

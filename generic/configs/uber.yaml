@@ -1,0 +1,5 @@
+domain_name: uber
+entity_id: com.uber.rides
+description: AI agent for booking rides
+model: gpt-4o-mini
+currency: INR

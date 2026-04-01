@@ -1,172 +1,147 @@
 """
-Generic Talk Engine — production-hardened wrapper for UrbanBotAgent.
+Generic Talk Engine - Same signature as MCP/Custom.
 
-Resilience:
-- validate_dost_event()  → rejects malformed/non-UUID input before any processing
-- with_timeout(55s)      → hard cap prevents hung LangGraph ReAct loops
-- TalkMetrics            → consistent DPA format metrics across all agents
-- Token-bucket rate limiter → per-session, 10 requests/minute
+talk(dostEvent) -> (response_dostEvent, metrics)
+
+Bridges the GenericReActAgent (LangGraph) into the standard DOST talk() interface.
 """
 from __future__ import annotations
 
 import logging
-import time
-from collections import defaultdict
-from typing import Any, Dict, Tuple
+from typing import Dict, Any, Tuple
 
-import sys as _sys, os as _os
-_sys.path.insert(0, _os.path.abspath(_os.path.join(_os.path.dirname(__file__), "../../..")))
-from shared.protocol import (
+from dost.protocol import (
     create_dost_event,
     create_dost_message,
     extract_query_text,
-    validate_dost_event,
 )
-from shared.shared_breaker import with_timeout
-from app.agent.urban_agent import UrbanBotAgent
-from app.config import get_settings
+from dost.metrics import TalkMetrics
 
 logger = logging.getLogger(__name__)
 
-_TALK_TIMEOUT = 55.0  # seconds — LangGraph ReAct loops can be multi-step
-
-# ---------------------------------------------------------------------------
-# Rate limiter — token bucket, per sessionId
-# ---------------------------------------------------------------------------
-_RATE_BUCKETS: Dict[str, Dict[str, float]] = defaultdict(
-    lambda: {"tokens": 10.0, "last_refill": time.monotonic()}
-)
-_RATE_LIMIT_CAPACITY = 10.0   # max tokens per session
-_RATE_LIMIT_REFILL_RATE = 10.0 / 60.0  # tokens per second (10 per minute)
+# Agent instance — set by main.py at startup
+_agent = None
 
 
-def _check_rate_limit(session_id: str) -> bool:
-    """
-    Token-bucket rate limiter.
-    Returns True if the request is allowed, False if rate-limited.
-    """
-    bucket = _RATE_BUCKETS[session_id]
-    now = time.monotonic()
-    elapsed = now - bucket["last_refill"]
-    bucket["tokens"] = min(
-        _RATE_LIMIT_CAPACITY,
-        bucket["tokens"] + elapsed * _RATE_LIMIT_REFILL_RATE,
-    )
-    bucket["last_refill"] = now
-    if bucket["tokens"] >= 1.0:
-        bucket["tokens"] -= 1.0
-        return True
-    return False
-
-
-# ---------------------------------------------------------------------------
-# Agent singleton
-# ---------------------------------------------------------------------------
-_agent: UrbanBotAgent | None = None
-
-
-def _get_agent() -> UrbanBotAgent:
+def set_agent(agent) -> None:
+    """Set the agent instance for talk()."""
     global _agent
-    if _agent is None:
-        _agent = UrbanBotAgent()
+    _agent = agent
+
+
+def get_agent():
+    """Get the current agent instance."""
     return _agent
 
 
-# ---------------------------------------------------------------------------
-# Talk
-# ---------------------------------------------------------------------------
 async def talk(event: Dict[str, Any]) -> Tuple[Dict[str, Any], Dict[str, Any]]:
     """
-    Process a dostEvent through the UrbanBotAgent.
+    Process a talk request - SAME SIGNATURE AS MCP/Custom.
+
+    Args:
+        event: Incoming dostEvent dict with message
+
+    Returns:
+        Tuple of (response_dostEvent, metrics)
 
     Flow:
-    1. Validate dostEvent structure (UUID sessionId enforced)
-    2. Rate limit per sessionId
-    3. Extract message
-    4. Run agent with hard 55s timeout
-    5. Return (dostEvent response, DPA metrics)
+    1. Extract entity_id, session_id, message from dostEvent
+    2. Create TalkMetrics
+    3. Call agent.process_message()
+    4. Track token usage via TalkMetrics
+    5. Build response dostEvent
+    6. Return (dostEvent, metrics.to_dict())
     """
+    from config import get_settings
+
+    # Extract from INPUT dostEvent
+    entity_id = event.get("sourceEntityId", "unknown")
+    session_id = event.get("sessionId")
+    user_message = extract_query_text(event)
+
+    logger.info(
+        f"TALK - Entity: {entity_id}, Session: {session_id}, "
+        f"Message: '{user_message[:50] if user_message else ''}...'"
+    )
+
     settings = get_settings()
     agent_entity_id = settings.agent.entity_id
 
-    # 1. Validate
-    try:
-        validate_dost_event(event)
-    except ValueError as exc:
-        logger.warning("Invalid dostEvent: %s", exc)
-        entity_id = event.get("sourceEntityId", "unknown") if isinstance(event, dict) else "unknown"
-        session_id = event.get("sessionId") if isinstance(event, dict) else None
-        return _build_error(agent_entity_id, entity_id, session_id, str(exc)), {"models": {}}
+    # Initialize metrics tracker
+    metrics = TalkMetrics()
 
-    entity_id = event["sourceEntityId"]
-    session_id = event["sessionId"]
+    # Validate message length
+    MAX_MESSAGE_LENGTH = 10_000
+    if user_message and len(user_message) > MAX_MESSAGE_LENGTH:
+        user_message = user_message[:MAX_MESSAGE_LENGTH]
 
-    # 2. Rate limit
-    if not _check_rate_limit(session_id):
-        logger.warning("Rate limit exceeded — session: %s", session_id)
-        return _build_error(
-            agent_entity_id, entity_id, session_id,
-            "Too many requests. Please wait a moment before trying again."
-        ), {"models": {}}
-
-    # 3. Extract message
-    user_message = extract_query_text(event)
-    logger.info("TALK - Entity: %s, Session: %s, Message: '%s...'", entity_id, session_id, user_message[:50])
-
+    # Handle empty message
     if not user_message:
         return _build_response(
-            agent_entity_id, entity_id, session_id, "I didn't catch that. Could you say something?"
-        ), {"models": {}}
+            agent_entity_id=agent_entity_id,
+            destination_entity_id=entity_id,
+            session_id=session_id,
+            message_text="I didn't catch that. Could you say something?",
+        ), metrics.to_dict()
 
-    # 4. Run agent with timeout
+    if _agent is None:
+        return _build_response(
+            agent_entity_id=agent_entity_id,
+            destination_entity_id=entity_id,
+            session_id=session_id,
+            message_text="Agent not initialized. Please try again later.",
+            event_hint="error",
+        ), metrics.to_dict()
+
     try:
-        result = await with_timeout(
-            _get_agent().process_message(user_message, session_id),
-            timeout=_TALK_TIMEOUT,
-            operation="generic_agent.process_message",
+        # Call GenericReActAgent
+        result = await _agent.process_message(
+            user_message=user_message,
+            user_id=session_id or "anonymous",
         )
-        response_text = result["response"]
-        logger.info("TALK - Response: %d chars", len(response_text))
-        return _build_response(agent_entity_id, entity_id, session_id, response_text), {"models": {}}
 
-    except TimeoutError as exc:
-        logger.error("Talk timed out: %s", exc)
-        return _build_error(
-            agent_entity_id, entity_id, session_id,
-            "Request timed out. Please try again."
-        ), {"models": {}}
+        # Track LLM token usage
+        model = result.get("model", "")
+        input_tokens = result.get("input_tokens", 0)
+        output_tokens = result.get("output_tokens", 0)
+        if model and (input_tokens > 0 or output_tokens > 0):
+            metrics.add_llm(model, input_tokens, output_tokens)
 
-    except Exception as exc:
-        logger.exception("Talk error: %s", exc)
-        return _build_error(
-            agent_entity_id, entity_id, session_id,
-            "Service temporarily unavailable. Please try again shortly."
-        ), {"models": {}}
+        response_text = result.get("response", "I couldn't process that request.")
+
+        logger.info(f"TALK - Response: {len(response_text)} chars, Metrics: {metrics.to_dict()}")
+
+        return _build_response(
+            agent_entity_id=agent_entity_id,
+            destination_entity_id=entity_id,
+            session_id=session_id,
+            message_text=response_text,
+        ), metrics.to_dict()
+
+    except Exception as e:
+        logger.exception("Talk error")
+        return _build_response(
+            agent_entity_id=agent_entity_id,
+            destination_entity_id=entity_id,
+            session_id=session_id,
+            message_text="I encountered an issue processing your request. Please try again.",
+            event_hint="error",
+        ), metrics.to_dict()
 
 
 def _build_response(
     agent_entity_id: str,
-    entity_id: str,
+    destination_entity_id: str,
     session_id: str,
-    text: str,
+    message_text: str,
     event_hint: str = "response",
 ) -> Dict[str, Any]:
+    """Build a dostEvent response."""
     return create_dost_event(
         source_entity_id=agent_entity_id,
-        destination_entity_id=entity_id,
+        destination_entity_id=destination_entity_id,
         session_id=session_id,
         event_hint=event_hint,
         is_ai_generated=True,
-        message=create_dost_message(text=text),
+        message=create_dost_message(text=message_text),
     )
-
-
-def _build_error(
-    agent_entity_id: str,
-    entity_id: str,
-    session_id: str | None,
-    message: str,
-) -> Dict[str, Any]:
-    # If session_id is missing/invalid, fall back to a synthetic one for the response
-    sid = session_id or "00000000-0000-0000-0000-000000000000"
-    return _build_response(agent_entity_id, entity_id, sid, message, event_hint="error")

@@ -31,7 +31,7 @@ except ImportError:
 
 from app.core.generic_agent import GenericReActAgent
 from app.domains import get_domain_config
-from app.core.protocol import create_dost_event, create_dost_message
+from dost.protocol import create_dost_event, create_dost_message
 
 
 class OmniAgentPlayground:
@@ -169,7 +169,7 @@ class OmniAgentPlayground:
             if self.verbose:
                 timestamp = datetime.now().strftime("%H:%M:%S")
                 print(f"{Fore.BLUE}{timestamp} | omniagent.playground | Response delivered{Style.RESET_ALL}\n")
-            
+        
         except Exception as e:
             print(f"{Fore.RED}❌ Error processing message: {e}{Style.RESET_ALL}")
             if self.verbose:

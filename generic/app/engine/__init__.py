@@ -1,2 +1,1 @@
-# generic/app/engine/__init__.py
-
+# Generic agent engine

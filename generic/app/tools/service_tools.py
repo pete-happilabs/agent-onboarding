@@ -15,7 +15,7 @@ from pymongo.database import Database
 from pydantic import BaseModel, Field
 
 from app.core.vector_store import get_vector_store
-from config import MongoDBConfig
+from config import get_settings
 
 logger = logging.getLogger(__name__)
 
@@ -76,8 +76,8 @@ def _get_sync_db() -> Database:
     """
     global _sync_client
     if _sync_client is None:
-        _sync_client = MongoClient(MongoDBConfig.URI)
-    return _sync_client[MongoDBConfig.DATABASE_NAME]
+        _sync_client = MongoClient(get_settings().mongodb.uri)
+    return _sync_client[get_settings().mongodb.database_name]
 
 
 # -----------------------------------------------------------------------------
@@ -472,7 +472,7 @@ def save_booking(
 
     try:
         db = _get_sync_db()
-        db[MongoDBConfig.BOOKINGS_COLLECTION].insert_one(record)
+        db[get_settings().mongodb.bookings_collection].insert_one(record)
         logger.info("Booking saved: %s for session %s", booking_id, payload.user_id)
         return (
             "BOOKING CONFIRMED!\n\n"
@@ -504,7 +504,7 @@ def get_user_bookings(user_id: str) -> str:
     """
     try:
         db = _get_sync_db()
-        cursor = db[MongoDBConfig.BOOKINGS_COLLECTION].find({"session_id": user_id}).sort(
+        cursor = db[get_settings().mongodb.bookings_collection].find({"session_id": user_id}).sort(
             "created_at", -1
         )
         user_bookings = list(cursor)

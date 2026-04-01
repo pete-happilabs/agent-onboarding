@@ -1,53 +1,31 @@
 """
-REST API routes for Urban Bot.
+REST API routes for Generic Agent.
 DOST-compliant using dostEvent protocol v00.01.01
 """
 import logging
 from datetime import datetime
 from typing import Optional, Dict, Any, List
 
-from fastapi import APIRouter, Query, HTTPException
+from urllib.parse import quote
+
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
-from app.agent.urban_agent import UrbanBotAgent
-from app.core.database import get_mongodb
-from app.core.vector_store import get_vector_store
-import sys as _sys, os as _os
-_sys.path.insert(0, _os.path.abspath(_os.path.join(_os.path.dirname(__file__), "../../..")))
-from shared.protocol import (
+from dost.protocol import (
     create_dost_event,
     create_dost_message,
     create_dost_object,
-    create_dost_pricing,
-    create_dost_action,
-    create_dost_location,
     create_dost_category,
     create_dost_categories,
+    create_dost_pricing,
+    create_dost_location,
+    create_dost_action,
     extract_query_text,
 )
-
-
-logger = logging.getLogger(__name__)
-
-router = APIRouter()
-
-_agent: Optional[UrbanBotAgent] = None
-
-
-def set_agent(agent: UrbanBotAgent) -> None:
-    """Set the agent instance for routes."""
-    global _agent
-    _agent = agent
-
-
-@router.get("/health")
-async def health():
-    """Health check endpoint for load balancers and monitoring."""
-    return {
-        "status": "healthy",
-        "agent": "generic",
-        "ready": _agent is not None
-    }
+from dost.metrics import TalkMetrics
+from app.core.database import get_mongodb
+from app.core.vector_store import get_vector_store
+from config import get_settings
 
 
 # =============================================================================
@@ -76,12 +54,27 @@ class DostResponse(BaseModel):
     event: Dict[str, Any]
     metrics: Dict[str, Any]
 
+
+logger = logging.getLogger(__name__)
+
+router = APIRouter()
+
+# Agent instance (initialized in main.py)
+_agent = None
+
+
+def set_agent(agent) -> None:
+    """Set the agent instance for routes."""
+    global _agent
+    _agent = agent
+
+
 # =============================================================================
 # Service to DOST Object Converter
 # =============================================================================
 
 def service_to_dost_object(service: Dict[str, Any]) -> Dict[str, Any]:
-    """Convert Urban Company service to dostObject."""
+    """Convert a service to dostObject."""
 
     # Build pricing
     pricing = create_dost_pricing(
@@ -101,7 +94,7 @@ def service_to_dost_object(service: Dict[str, Any]) -> Dict[str, Any]:
     # Build action
     action = create_dost_action(
         display_text="Book Now",
-        url=f"/uc-agent?action=book&service_id={service['service_id']}"
+        url=f"/uc-agent?action=book&service_id={quote(str(service['service_id']), safe='')}"
     )
 
     # Build dostObject
@@ -116,14 +109,14 @@ def service_to_dost_object(service: Dict[str, Any]) -> Dict[str, Any]:
     )
 
 
-def search_services_for_dost(query: str, city: str = "") -> List[Dict[str, Any]]:
+def search_services_for_dost(query: str, city: str = "") -> Dict[str, List[Dict[str, Any]]]:
     """Search services and return as dostObjects grouped by category."""
 
     vector_store = get_vector_store()
     results = vector_store.search(query, top_k=10)
 
     if not results:
-        return []
+        return {}
 
     # City normalization
     city_aliases = {
@@ -133,7 +126,7 @@ def search_services_for_dost(query: str, city: str = "") -> List[Dict[str, Any]]
     city_normalized = city_aliases.get(city.lower().strip(), city.lower().strip()) if city else ""
 
     # Filter and group by category
-    categories_dict = {}
+    categories_dict: Dict[str, List[Dict[str, Any]]] = {}
 
     for result in results:
         service = result['service']
@@ -177,16 +170,18 @@ def extract_city_from_message(message: str) -> str:
 @router.post("/uc-agent", response_model=DostResponse)
 async def uc_agent(event: DostEvent):
     """
-    Urban Company Agent - DOST-compliant endpoint.
+    Generic Agent - DOST-compliant endpoint.
 
     Accepts: dostEvent with message.text.data containing user message
     Returns: dostEvent with AI response + structured categories with dostObjects
 
     Protocol: DOST Event Specification v00.01.01
-    Entity ID: com.urban.company
     """
     if _agent is None:
         raise HTTPException(status_code=503, detail="Agent not initialized")
+
+    settings = get_settings()
+    agent_entity_id = settings.agent.entity_id
 
     try:
         mongodb = get_mongodb()
@@ -199,10 +194,14 @@ async def uc_agent(event: DostEvent):
         if not user_message:
             raise HTTPException(status_code=400, detail="No message text in dostEvent")
 
+        MAX_MESSAGE_LENGTH = 10_000
+        if len(user_message) > MAX_MESSAGE_LENGTH:
+            user_message = user_message[:MAX_MESSAGE_LENGTH]
+
         logger.info(f"[UC-AGENT] Received from {source_entity}: {user_message[:50]}...")
 
         # Load or create session
-        session = await mongodb.sessions.find_one({"session_id": session_id})
+        session = await mongodb.sessions.find_one({"session_id": {"$eq": session_id}})
 
         if session:
             previous_state = {
@@ -234,6 +233,14 @@ async def uc_agent(event: DostEvent):
             metadata=None
         )
 
+        # Track token usage via TalkMetrics
+        metrics = TalkMetrics()
+        model = result.get("model", "")
+        input_tokens = result.get("input_tokens", 0)
+        output_tokens = result.get("output_tokens", 0)
+        if model and (input_tokens > 0 or output_tokens > 0):
+            metrics.add_llm(model, input_tokens, output_tokens)
+
         # Update session
         messages_history.append({
             "role": "user",
@@ -249,7 +256,7 @@ async def uc_agent(event: DostEvent):
 
         new_state = result.get("state", {})
         await mongodb.sessions.update_one(
-            {"session_id": session_id},
+            {"session_id": {"$eq": session_id}},
             {
                 "$set": {
                     "messages": messages_history,
@@ -278,14 +285,14 @@ async def uc_agent(event: DostEvent):
 
             if category_list:
                 dost_categories = create_dost_categories(
-                    currency="INR",
+                    currency=settings.generic.currency,
                     categories=category_list
                 )
 
         # Build DOST response event
         response_message = create_dost_message(text=result["response"])
         response_event = create_dost_event(
-            source_entity_id="com.urban.company",
+            source_entity_id=agent_entity_id,
             destination_entity_id=source_entity,
             session_id=session_id,
             event_hint="talk_response",
@@ -294,18 +301,12 @@ async def uc_agent(event: DostEvent):
             categories=dost_categories
         )
 
-        metrics = {
-            "input_tokens": 0,
-            "output_tokens": 0,
-            "model": "gpt-4o-mini"
-        }
-
         logger.info(f"[UC-AGENT] Response: {result['response'][:50]}... (categories: {len(categories_dict)} types)")
 
-        return DostResponse(event=response_event, metrics=metrics)
+        return DostResponse(event=response_event, metrics=metrics.to_dict())
 
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"[UC-AGENT] Error: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
+        logger.error("[UC-AGENT] Error: %s", e, exc_info=True)
+        raise HTTPException(status_code=500, detail="Internal server error")

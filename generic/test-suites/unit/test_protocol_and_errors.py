@@ -10,7 +10,7 @@ from typing import Dict, Any
 # Add generic root to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from app.core.protocol import (
+from dost.protocol import (
     create_dost_event,
     create_dost_message,
     create_dost_object,
@@ -47,7 +47,7 @@ class TestProtocolErrorHandling:
     
     def test_dost_event_with_categories_only(self):
         """dostEvent can be created with just categories"""
-        from app.core.protocol import create_dost_categories
+        from dost.protocol import create_dost_categories
         
         categories = create_dost_categories(
             currency="INR",

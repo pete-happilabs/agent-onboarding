@@ -122,7 +122,9 @@ class MCPClient:
         transport_mode: str,
     ) -> str:
         """Build the mcp-remote command for remote MCP servers."""
-        args = ["npx", "-y", "mcp-remote@latest", url]
+        import shlex
+
+        args = ["npx", "mcp-remote@latest", url]
 
         # Add OAuth port
         args.append(str(oauth_port))
@@ -133,12 +135,12 @@ class MCPClient:
         # Add auth timeout
         args.extend(["--auth-timeout", str(auth_timeout)])
 
-        # Add custom headers
+        # Add custom headers (shell-escape each value to prevent injection)
         if headers:
             for header in headers:
                 args.extend(["--header", header])
 
-        return " ".join(args)
+        return " ".join(shlex.quote(arg) for arg in args)
 
     async def connect(self) -> None:
         """Connect to the MCP server and initialize."""

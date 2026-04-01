@@ -148,14 +148,22 @@ class Settings:
                 if env_headers:
                     headers = [h.strip() for h in env_headers.split(";") if h.strip()]
 
+            timeout = int(mcp_config.get("timeout", os.getenv("MCP_TIMEOUT", "30")))
+            oauth_port = int(mcp_config.get("oauth_port", os.getenv("MCP_OAUTH_PORT", "3334")))
+            auth_timeout = int(mcp_config.get("auth_timeout", os.getenv("MCP_AUTH_TIMEOUT", "60")))
+            if not 1 <= oauth_port <= 65535:
+                raise ValueError(f"oauth_port must be 1-65535, got {oauth_port}")
+            if not 1 <= timeout <= 300:
+                raise ValueError(f"timeout must be 1-300, got {timeout}")
+
             self._mcp = MCPConfig(
                 transport=mcp_config.get("transport", os.getenv("MCP_TRANSPORT", "stdio")),
                 command=mcp_config.get("command", os.getenv("MCP_COMMAND")),
                 url=mcp_config.get("url", os.getenv("MCP_SERVER_URL")),
-                timeout=int(mcp_config.get("timeout", os.getenv("MCP_TIMEOUT", "30"))),
+                timeout=timeout,
                 # Remote-specific options
-                oauth_port=int(mcp_config.get("oauth_port", os.getenv("MCP_OAUTH_PORT", "3334"))),
-                auth_timeout=int(mcp_config.get("auth_timeout", os.getenv("MCP_AUTH_TIMEOUT", "60"))),
+                oauth_port=oauth_port,
+                auth_timeout=min(max(1, auth_timeout), 300),
                 headers=headers,
                 transport_mode=mcp_config.get("transport_mode", os.getenv("MCP_TRANSPORT_MODE", "http-first")),
             )
@@ -202,7 +210,7 @@ class Settings:
             server_config = config.get("server", {})
 
             self._server = ServerConfig(
-                host=server_config.get("host", os.getenv("MCP_BRIDGE_HOST", "0.0.0.0")),
+                host=server_config.get("host", os.getenv("MCP_BRIDGE_HOST", "127.0.0.1")),
                 port=int(server_config.get("port", os.getenv("MCP_BRIDGE_PORT", "8003"))),
             )
         return self._server

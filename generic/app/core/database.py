@@ -8,7 +8,7 @@ from typing import Optional
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
 from pymongo import IndexModel, ASCENDING
 
-from config import MongoDBConfig
+from config import get_settings
 
 logger = logging.getLogger(__name__)
 
@@ -31,12 +31,12 @@ class MongoDB:
             return
         
         try:
-            self._client = AsyncIOMotorClient(MongoDBConfig.URI)
-            self._db = self._client[MongoDBConfig.DATABASE_NAME]
+            self._client = AsyncIOMotorClient(get_settings().mongodb.uri)
+            self._db = self._client[get_settings().mongodb.database_name]
             
             # Verify connection
             await self._client.admin.command('ping')
-            logger.info(f"Connected to MongoDB: {MongoDBConfig.DATABASE_NAME}")
+            logger.info(f"Connected to MongoDB: {get_settings().mongodb.database_name}")
             
             # Create indexes for performance
             await self._create_indexes()
@@ -48,20 +48,20 @@ class MongoDB:
     async def _create_indexes(self) -> None:
         """Create indexes for fast lookups."""
         # Sessions collection indexes
-        sessions = self._db[MongoDBConfig.SESSIONS_COLLECTION]
+        sessions = self._db[get_settings().mongodb.sessions_collection]
         await sessions.create_indexes([
             IndexModel([("session_id", ASCENDING)], unique=True)
         ])
         
         # Bookings collection indexes
-        bookings = self._db[MongoDBConfig.BOOKINGS_COLLECTION]
+        bookings = self._db[get_settings().mongodb.bookings_collection]
         await bookings.create_indexes([
             IndexModel([("session_id", ASCENDING)]),
             IndexModel([("booking_id", ASCENDING)], unique=True)
         ])
         
         # Services collection indexes
-        services = self._db[MongoDBConfig.SERVICES_COLLECTION]
+        services = self._db[get_settings().mongodb.services_collection]
         await services.create_indexes([
             IndexModel([("service_id", ASCENDING)], unique=True),
             IndexModel([("category.name", ASCENDING)])
@@ -87,17 +87,17 @@ class MongoDB:
     @property
     def sessions(self):
         """Get sessions collection."""
-        return self.db[MongoDBConfig.SESSIONS_COLLECTION]
+        return self.db[get_settings().mongodb.sessions_collection]
     
     @property
     def bookings(self):
         """Get bookings collection."""
-        return self.db[MongoDBConfig.BOOKINGS_COLLECTION]
+        return self.db[get_settings().mongodb.bookings_collection]
     
     @property
     def services(self):
         """Get services collection."""
-        return self.db[MongoDBConfig.SERVICES_COLLECTION]
+        return self.db[get_settings().mongodb.services_collection]
 
 
 # Global instance

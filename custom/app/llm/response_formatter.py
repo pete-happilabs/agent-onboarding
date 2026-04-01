@@ -14,21 +14,14 @@ import logging
 import uuid
 from typing import Dict, Any, List, Optional
 
-import sys as _sys, os as _os
-_sys.path.insert(0, _os.path.abspath(_os.path.join(_os.path.dirname(__file__), "../../..")))
-from shared.protocol import (
-    create_dost_event,
-    create_dost_message,
+from dost.protocol import (
+    create_dost_categories,
+    create_dost_category,
     create_dost_object,
+    create_dost_location,
     create_dost_pricing,
     create_dost_action,
-    create_dost_location,
-    create_dost_category,
-    create_dost_categories,
-    extract_query_text,
 )
-
-
 
 logger = logging.getLogger(__name__)
 
@@ -175,9 +168,11 @@ def build_dost_object_from_item(
     image_field = mapping.get("image_field", "image")
     image_url = get_nested_value(item, image_field) or item.get("image_url") or item.get("thumbnail")
     if image_url:
-        media = {
-            "images": [{"data-type": "url", "data": str(image_url)}]
-        }
+        image_str = str(image_url)
+        if image_str.lower().startswith(("http://", "https://")):
+            media = {
+                "images": [{"data-type": "url", "data": image_str}]
+            }
 
     # Build actions if mapping provided
     actions = None

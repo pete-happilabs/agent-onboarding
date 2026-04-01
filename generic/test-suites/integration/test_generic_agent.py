@@ -11,7 +11,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from app.core.generic_agent import GenericReActAgent
-from app.core.protocol import DOST_SPEC_VERSION
+from dost.protocol import DOST_SPEC_VERSION
 from langchain_core.messages import AIMessage
 
 

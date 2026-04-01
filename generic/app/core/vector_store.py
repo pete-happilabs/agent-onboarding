@@ -9,7 +9,7 @@ from typing import List, Dict, Optional
 import chromadb
 from sentence_transformers import SentenceTransformer
 
-from config import FilePathConfig
+from config import get_settings
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +33,7 @@ class ServiceVectorStore:
         self._services: Dict[str, Dict] = {}
         
         # Initialize ChromaDB with persistent storage
-        persist_dir = Path(FilePathConfig.VECTOR_STORE_DIR)
+        persist_dir = Path(get_settings().file_paths.vector_store_dir)
         persist_dir.mkdir(parents=True, exist_ok=True)
         
         self._client = chromadb.PersistentClient(path=str(persist_dir))
@@ -50,7 +50,7 @@ class ServiceVectorStore:
     def _load_and_index_services(self) -> None:
         """Load services from JSON and index them into ChromaDB."""
         try:
-            with open(FilePathConfig.SERVICE_DATA_FILE, 'r') as f:
+            with open(get_settings().file_paths.service_data_file, 'r') as f:
                 services = json.load(f)
             
             # Check if already indexed

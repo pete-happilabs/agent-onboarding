@@ -110,6 +110,11 @@ class AuthHandler:
 
         return headers
 
+    @staticmethod
+    def _sanitize_header_value(value: str) -> str:
+        """Strip control characters from header values to prevent CRLF injection."""
+        return value.replace("\r", "").replace("\n", "").replace("\x00", "")
+
     def _resolve_extra_headers(self) -> Dict[str, str]:
         """Resolve extra_headers, substituting ${ENV_VAR} patterns."""
         if not self.config.extra_headers:
@@ -117,15 +122,19 @@ class AuthHandler:
 
         resolved = {}
         for key, value in self.config.extra_headers.items():
+            # Validate header name
+            if "\r" in key or "\n" in key:
+                logger.warning(f"Skipping header with invalid name: {key!r}")
+                continue
             if isinstance(value, str) and value.startswith("${") and value.endswith("}"):
                 env_var = value[2:-1]
                 env_value = os.getenv(env_var)
                 if env_value:
-                    resolved[key] = env_value
+                    resolved[key] = self._sanitize_header_value(env_value)
                 else:
                     logger.warning(f"Extra header env var {env_var} not set")
             else:
-                resolved[key] = str(value)
+                resolved[key] = self._sanitize_header_value(str(value))
         return resolved
 
     def _get_bearer_headers(self) -> Dict[str, str]:
@@ -206,6 +215,9 @@ class AuthHandler:
 
             token_data = response.json()
             self._oauth_token = token_data.get("access_token")
+            if not self._oauth_token:
+                logger.error("OAuth2 response missing access_token")
+                return {}
             expires_in = token_data.get("expires_in", 3600)
             self._oauth_expires = time.time() + expires_in - 60  # Refresh 1 min early
 

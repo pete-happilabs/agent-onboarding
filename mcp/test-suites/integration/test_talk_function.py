@@ -14,7 +14,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from app.engine.talk import talk
-from app.core.protocol import extract_query_text, DOST_SPEC_VERSION
+from dost.protocol import extract_query_text, DOST_SPEC_VERSION
 
 
 @pytest.mark.integration

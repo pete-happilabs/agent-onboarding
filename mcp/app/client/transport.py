@@ -16,6 +16,7 @@ from abc import ABC, abstractmethod
 from typing import Any, Dict, Optional
 
 import httpx
+from urllib.parse import urlparse
 
 logger = logging.getLogger(__name__)
 
@@ -52,6 +53,7 @@ class StdioTransport(Transport):
         self.command = command
         self.timeout = timeout
         self._process: Optional[asyncio.subprocess.Process] = None
+        self._stderr_task: Optional[asyncio.Task] = None
         self._request_id = 0
 
     async def connect(self) -> None:
@@ -77,8 +79,8 @@ class StdioTransport(Transport):
 
         logger.info(f"MCP server started (PID: {self._process.pid})")
 
-        # Start a task to log stderr
-        asyncio.create_task(self._log_stderr())
+        # Start a task to log stderr (track it for cleanup)
+        self._stderr_task = asyncio.create_task(self._log_stderr())
 
     async def _log_stderr(self) -> None:
         """Log stderr output from the subprocess."""
@@ -150,7 +152,14 @@ class StdioTransport(Transport):
             raise TimeoutError(f"MCP server did not respond within {self.timeout}s")
 
     async def close(self) -> None:
-        """Terminate the subprocess."""
+        """Terminate the subprocess and clean up resources."""
+        if self._stderr_task is not None:
+            self._stderr_task.cancel()
+            try:
+                await self._stderr_task
+            except asyncio.CancelledError:
+                pass
+            self._stderr_task = None
         if self._process is not None:
             logger.info("Closing MCP server subprocess")
             self._process.terminate()
@@ -170,6 +179,9 @@ class SSETransport(Transport):
     """
 
     def __init__(self, url: str, timeout: int = 30):
+        parsed = urlparse(url)
+        if parsed.scheme not in ("http", "https"):
+            raise ValueError(f"SSE URL must use http or https scheme, got: {parsed.scheme or 'none'}")
         self.url = url.rstrip("/")
         self.timeout = timeout
         self._client: Optional[httpx.AsyncClient] = None

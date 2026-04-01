@@ -15,9 +15,32 @@ This is the universal contract. No matter which way you build the agent — MCP,
 
 ```
 agent-onboarding/
+├── shared/     # Shared dost protocol + TalkMetrics (pip-installable)
 ├── mcp/        # Way 1: MCP Server Bridge
 ├── generic/    # Way 2: Generic Agent (just data + prompt)
 └── custom/     # Way 3: Custom REST API Agent + prompt
+```
+
+---
+
+## Shared Module
+
+All three templates import from a single `shared/dost` package — no more duplicate protocol.py or metrics.py files.
+
+```
+shared/dost/
+├── protocol.py   # DOST Event Spec v00.01.01 (create_dost_event, extract_query_text, etc.)
+└── metrics.py    # TalkMetrics class (per-model token tracking in DPA billing format)
+```
+
+**Install:** Each template's `requirements.txt` includes `-e ../shared` so `from dost.protocol import ...` and `from dost.metrics import TalkMetrics` work everywhere.
+
+**TalkMetrics** tracks per-model token counts for billing:
+```python
+metrics = TalkMetrics()
+metrics.add_llm("gpt-4o-mini", input_tokens=1834, output_tokens=44)
+metrics.to_dict()
+# → {"models": {"gpt-4o-mini": {"input_tokens": 1834, "output_tokens": 44}}}
 ```
 
 ---
@@ -58,6 +81,7 @@ agent:
 **Test it:**
 ```bash
 cd mcp
+pip install -r requirements.txt
 python3 playground.py --config configs/airbnb.yaml -v
 ```
 
@@ -67,7 +91,7 @@ python3 playground.py --config configs/airbnb.yaml -v
 
 **For:** Someone with no technical resources — no APIs, no MCP server. They just have data (a database, documents, spreadsheets, a catalog) and want an AI agent that can answer questions about it.
 
-**How it works:** Change the system prompt and point to a database. The agent becomes whatever you describe in the prompt — a restaurant guide, a real estate assistant, a product catalog. No code changes needed, just configuration.
+**How it works:** Change the system prompt and point to a database. The agent becomes whatever you describe in the prompt — a restaurant guide, a real estate assistant, a product catalog. No code changes needed, just configuration via `.env`.
 
 **What the developer provides:**
 - Data (database, CSV, documents)
@@ -76,16 +100,29 @@ python3 playground.py --config configs/airbnb.yaml -v
 **What we provide:**
 - A ready-made agent with pre-defined tools (search, lookup, filter)
 - Configurable system prompt that defines the agent's personality and behavior
-- Database connectors
+- Database connectors (MongoDB + ChromaDB vector search)
+- Both `talk()` and REST API (`POST /uc-agent`) interfaces
 
 ```
-User (dostEvent) → Generic Agent (prompt + DB) → dostEvent response
+User (dostEvent) → Generic Agent (prompt + DB) → dostEvent response + metrics
 ```
 
-**Example use cases:**
-- Restaurant owner with a menu database → "Food ordering assistant"
-- Real estate agent with property listings → "Property search assistant"
-- College with course catalog → "Admissions assistant"
+**Reusable across domains** — spin up different agents by changing `DOMAIN_CONFIG` in `.env`:
+```bash
+# app/.env
+DOMAIN_CONFIG=urban_company   # or: myntra, swiggy
+AGENT_ENTITY_ID=com.urban.company
+AGENT_NAME=UrbanBot
+```
+
+**Built-in domains:** `urban_company` (home services), `myntra` (fashion), `swiggy` (food delivery)
+
+**Test it:**
+```bash
+cd generic
+pip install -r requirements.txt
+python3 playground.py --config configs/urban_company.yaml -v
+```
 
 ---
 
@@ -106,7 +143,7 @@ User (dostEvent) → Generic Agent (prompt + DB) → dostEvent response
 - Response mapping from API JSON to dostObjects
 
 ```
-User (dostEvent) → Custom Agent (YAML tools) → REST APIs → dostEvent response
+User (dostEvent) → Custom Agent (YAML tools) → REST APIs → dostEvent response + metrics
 ```
 
 **Config example:**
@@ -132,6 +169,7 @@ tools:
 **Test it:**
 ```bash
 cd custom
+pip install -r requirements.txt
 python3 mealdb-playground.py    # FREE API, works immediately
 ```
 
@@ -143,12 +181,14 @@ python3 mealdb-playground.py    # FREE API, works immediately
 |---|---|---|---|
 | **Who is it for** | Devs with MCP servers | Anyone with just data | Devs with REST APIs |
 | **What they provide** | MCP server URL | Data + prompt | API endpoints in YAML |
-| **Tool discovery** | Automatic from MCP | Pre-built | YAML config |
+| **Tool discovery** | Automatic from MCP | Pre-built per domain | YAML config |
 | **Code required** | None (just YAML config) | None (just prompt + data) | None (just YAML config) |
 | **Auth support** | OAuth via mcp-remote | N/A | Bearer, API key, Basic, OAuth2 |
-| **LLM** | ReAct agent (OpenAI) | ReAct agent (OpenAI) | ReAct agent (OpenAI) |
-| **Input/Output** | dostEvent | dostEvent | dostEvent |
-| **Metrics** | DPA format | DPA format | DPA format |
+| **LLM** | ReAct agent (OpenAI) | LangGraph ReAct (OpenAI) | ReAct agent (OpenAI) |
+| **Config** | YAML + .env | .env (Settings class) | YAML + .env |
+| **talk()** | Yes | Yes | Yes |
+| **Metrics** | TalkMetrics (DPA format) | TalkMetrics (DPA format) | TalkMetrics (DPA format) |
+| **Multi-domain** | Per YAML config | DOMAIN_CONFIG env var | Per YAML config |
 
 ---
 
@@ -190,8 +230,6 @@ Client (DOST app)
 Client receives structured response
 ```
 
-**For MCP and Custom agents:** We wrap the `talk()` function in a WebSocket server, host it, and register the agent's entity ID in DAS. Once registered, any DOST client can discover the agent and talk to it directly.
-
 ---
 
 ## dostEvent Protocol
@@ -227,8 +265,8 @@ Every agent speaks dostEvent (version `00.01.01`):
       {
         "title": "Cuisine Results",
         "objects": [
-          { "title": "Butter Chicken", "media": { "images": ["..."] } },
-          { "title": "Dal Makhani",    "media": { "images": ["..."] } }
+          { "title": "Butter Chicken", "media": { "images": [...] } },
+          { "title": "Dal Makhani", "media": { "images": [...] } }
         ]
       }
     ]
@@ -236,7 +274,7 @@ Every agent speaks dostEvent (version `00.01.01`):
 }
 ```
 
-**Metrics** (DPA format):
+**Metrics** (DPA billing format — per-model token counts):
 ```json
 {
   "models": {
@@ -253,27 +291,35 @@ Every agent speaks dostEvent (version `00.01.01`):
 ## Quick Start
 
 ```bash
+# Install shared module first (required by all 3)
+pip install -e shared/
+
 # Way 1: MCP (need an MCP server)
 cd mcp
 pip install -r requirements.txt
 python3 playground.py --config configs/airbnb.yaml
 
-# Way 2: Generic (need data + prompt)
+# Way 2: Generic (need data + MongoDB)
 cd generic
+pip install -r requirements.txt
+python3 playground.py --config configs/urban_company.yaml
 
-# Way 3: Custom REST API (need API endpoints + prompt)
+# Way 3: Custom REST API (need API endpoints)
 cd custom
 pip install -r requirements.txt
 python3 mealdb-playground.py          # FREE API, no token needed
-python3 uber-playground.py            # Needs UBER_API_TOKEN
-python3 flipkart-playground.py        # Needs FLIPKART_AFFILIATE_ID
+```
+
+Or install everything at once from root:
+```bash
+pip install -r requirements.txt
 ```
 
 ---
 
 ## Architecture
 
-All three ways share the same core pattern:
+All three ways share the same core pattern and the `shared/dost` module:
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -281,11 +327,16 @@ All three ways share the same core pattern:
 │                                                             │
 │  ┌──────────┐    ┌──────────┐    ┌────────────────────────┐ │
 │  │ protocol │    │  agent   │    │   tool source          │ │
-│  │(dostEvent)│   │ (ReAct)  │    │                        │ │
-│  │          │    │          │    │  MCP: MCP server       │ │
+│  │(shared/  │    │ (ReAct)  │    │                        │ │
+│  │  dost)   │    │          │    │  MCP: MCP server       │ │
 │  │  IN/OUT  │◄──►│  OpenAI  │◄──►│  Generic: Database     │ │
 │  │          │    │  LLM     │    │  Custom: REST APIs     │ │
 │  └──────────┘    └──────────┘    └────────────────────────┘ │
+│                                                             │
+│  ┌──────────┐                                               │
+│  │ metrics  │  TalkMetrics (shared/dost)                    │
+│  │(DPA fmt) │  Per-model token tracking for billing         │
+│  └──────────┘                                               │
 │                                                             │
 │  talk(dostEvent) → (dostEvent, metrics)                     │
 └─────────────────────────────────────────────────────────────┘
@@ -296,208 +347,56 @@ All three ways share the same core pattern:
 ```
 
 ---
----
 
-## 🛡️ Resilience
-
-All three agents are production-hardened with the same resilience layer:
-
-dostEvent
-│
-▼
-validate_dost_event() ← Rejects malformed input before any processing
-│
-▼
-with_timeout(agent.run()) ← Hard cap prevents hung WebSocket connections
-│
-├── LLM calls ← Retry ×3 with exponential backoff
-│
-└── External calls ← AsyncCircuitBreaker
-CLOSED → calls pass through
-OPEN → CircuitBreakerOpen → "Service unavailable" (user-facing)
-HALF_OPEN → probe after recovery_timeout
-
-
-### Input Validation
-
-Every `talk()` validates the incoming dostEvent before touching any LLM or tool:
-
-```python
-validate_dost_event(event)   # raises ValueError if sourceEntityId or sessionId missing
-
-Invalid events get a structured error dostEvent back immediately — no LLM call is made.
-
-Hard Timeouts
-| Agent   | Timeout | Reason                                      |
-| ------- | ------- | ------------------------------------------- |
-| Custom  | 28s     | Less than typical WebSocket gateway timeout |
-| MCP     | 28s     | MCP server calls can hang indefinitely      |
-| Generic | 55s     | LangGraph ReAct loops can be multi-step     |
-
-Retry Logic
-LLM API calls (OpenAI / LangChain) are retried up to 3 times with exponential backoff on any transient failure (rate limits, 500s, network blips):
-Attempt 1 → fail → wait 1s
-Attempt 2 → fail → wait 2s
-Attempt 3 → fail → wait 4s (capped at 8s)
-Attempt 4 → reraise
-
-Circuit Breaker
-External service calls (REST APIs in Custom, MCP connect/call in MCP) are protected by AsyncCircuitBreaker:
-| Parameter         | Custom REST | MCP Connect | MCP Call |
-| ----------------- | ----------- | ----------- | -------- |
-| failure_threshold | 5           | 3           | 5        |
-| recovery_timeout  | 30s         | 60s         | 30s      |
-
-MCP connect has a lower threshold (3) and longer recovery (60s) because an MCP server going down is a harder failure than a single tool call failing.
-
-When a circuit is OPEN, the user receives:
-"Service temporarily unavailable. Please try again shortly."
-— never a raw Python exception.
-
-Resilience Files
-custom/app/core/resilience.py    ← AsyncCircuitBreaker, with_timeout, llm_retry
-mcp/app/core/resilience.py       ← identical
-generic/app/core/resilience.py   ← identical
-
-***
-
-## Also Update Test Structure Block
-
-Replace the existing test structure tree with:
-
-```markdown
-agent-onboarding/
-├── mcp/test-suites/
-│ ├── conftest.py
-│ ├── pytest.ini
-│ ├── requirements-test.txt
-│ ├── contract/
-│ │ └── test_dostevent_schema.py # 2 contract tests
-│ ├── integration/
-│ │ └── test_talk_function.py # 4 integration tests
-│ └── unit/
-│ ├── test_dostevent_parser.py
-│ ├── test_metrics_and_resilience.py
-│ ├── test_protocol_and_errors.py
-│ └── test_resilience.py # 28 resilience tests ← NEW
-│
-├── custom/test-suites/ # Same structure as MCP
-│ └── unit/
-│ └── test_resilience.py # 36 resilience tests ← NEW
-│
-└── generic/test-suites/
-└── unit/
-└── test_resilience.py # 28 resilience tests ← NEW
-undefined
-
-## 🧪 Test Suites
-
-Production-grade test suites are provided for all three agents.
-
-### Test Coverage
-
-| Agent | Total Tests | Unit | Integration | Contract |
-|-------|-------------|------|-------------|----------|
-| **MCP** | 71 | 65 | 4 | 2 |
-| **Custom** | 78 | 72 | 3 | 2 |
-| **Generic** | 71 | 65 | 4 | 2 |
-| **TOTAL** | **220** | **202** | **11** | **6** |
-
-
-### Run All Tests
-
-```powershell
-# Activate venv first
-.\venv\Scripts\Activate.ps1
-
-# MCP Agent
-cd mcp\test-suites
-pytest -v
-
-# Custom Agent
-cd ..\..\custom\test-suites
-pytest -v
-
-# Generic Agent
-cd ..\..\generic\test-suites
-pytest -v
-```
-
-### Run by Test Type
-
-```powershell
-pytest -m unit        # Unit tests only
-pytest -m integration # Integration tests only
-pytest -m contract    # Contract tests only
-```
-
-### Test Categories
-
-**Unit Tests (111 tests)**
-- dostEvent protocol validation per DOST spec v00.01.01
-- Error handling and edge cases (missing fields, invalid types)
-- DPA metrics format (token tracking per model)
-- dostEvent parsing and extraction
-
-**Integration Tests (11 tests)**
-- Real `talk()` function — MCP and Custom agents
-- Real `process_message()` — Generic agent
-- End-to-end workflows with mocked LLM and tool dependencies
-
-**Contract Tests (6 tests)**
-- DOST spec v00.01.01 compliance
-- Schema validation (required fields, types, version format)
-
-### Test Structure
+## Project Structure
 
 ```
 agent-onboarding/
-├── mcp/test-suites/
-│   ├── conftest.py                          # Shared fixtures
-│   ├── pytest.ini                           # Pytest config + markers
-│   ├── requirements-test.txt                # Test dependencies
-│   ├── contract/
-│   │   └── test_dostevent_schema.py         # 2 contract tests
-│   ├── integration/
-│   │   └── test_talk_function.py            # 4 integration tests
-│   └── unit/
-│       ├── test_dostevent_parser.py         # Parser unit tests
-│       ├── test_metrics_and_resilience.py   # Metrics unit tests
-│       └── test_protocol_and_errors.py      # Protocol error tests
+├── README.md
+├── requirements.txt          # Root: installs shared + all 3 templates
 │
-├── custom/test-suites/                      # Same structure as MCP
-│   └── ...
+├── shared/                   # Shared DOST protocol + metrics
+│   ├── pyproject.toml
+│   └── dost/
+│       ├── __init__.py
+│       ├── protocol.py       # DOST Event Spec v00.01.01
+│       └── metrics.py        # TalkMetrics class
 │
-└── generic/test-suites/                     # Same structure, adapted
-    └── integration/
-        └── test_generic_agent.py            # Tests process_message()
+├── mcp/                      # Way 1: MCP Server Bridge
+│   ├── requirements.txt
+│   ├── main.py               # CLI entry point
+│   ├── playground.py         # Interactive testing
+│   ├── configs/              # YAML configs (airbnb, test-server)
+│   └── app/
+│       ├── config.py         # Settings (YAML + .env)
+│       ├── engine/talk.py    # talk() function
+│       ├── llm/              # ReAct agent, response formatter
+│       └── client/           # MCP client, transport
+│
+├── generic/                  # Way 2: Generic Agent
+│   ├── requirements.txt
+│   ├── config.py             # Settings (.env, lazy-loaded)
+│   ├── main.py               # FastAPI server
+│   ├── playground.py         # Interactive testing
+│   ├── configs/              # Domain YAML configs
+│   └── app/
+│       ├── .env              # Environment config
+│       ├── engine/talk.py    # talk() function
+│       ├── core/
+│       │   ├── generic_agent.py   # LangGraph ReAct agent
+│       │   ├── database.py        # MongoDB
+│       │   └── vector_store.py    # ChromaDB
+│       ├── api/routes.py     # REST endpoint (POST /uc-agent)
+│       ├── domains/          # Domain configs (urban_company, myntra, swiggy)
+│       └── tools/            # LangChain tools
+│
+└── custom/                   # Way 3: Custom REST API Agent
+    ├── requirements.txt
+    ├── mealdb-playground.py  # Interactive testing (TheMealDB)
+    ├── configs/              # YAML API configs (mealdb, template)
+    └── app/
+        ├── config.py         # Settings (.env, lazy-loaded)
+        ├── engine/talk.py    # talk() function
+        ├── llm/              # ReAct agent, prompts, response formatter
+        └── custom/           # REST client, auth, executor
 ```
-
-### Test Conventions
-
-- **Markers:** `@pytest.mark.unit`, `@pytest.mark.integration`, `@pytest.mark.contract`
-- **Fixtures:** Shared in `conftest.py` per agent
-- **Naming:** `test_*.py` for all test files
-- **Mocking:** Real code imports + mocked external dependencies (LLM, MCP server, REST APIs)
-- **Async:** `@pytest.mark.asyncio` for all async tests
-
-### Environment Setup
-
-```bash
-# Create and activate venv
-python -m venv venv
-.\venv\Scripts\Activate.ps1      # Windows
-source venv/bin/activate          # macOS/Linux
-
-# Install test dependencies per agent
-pip install -r mcp/requirements.txt
-pip install -r mcp/test-suites/requirements-test.txt
-
-pip install -r custom/requirements.txt
-pip install -r custom/test-suites/requirements-test.txt
-
-pip install -r generic/requirements.txt
-pip install -r generic/test-suites/requirements-test.txt
-```
-
-> **Note:** Never commit `.env` files. Copy `.env.example` to `.env` and fill in your keys locally.

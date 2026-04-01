@@ -70,15 +70,21 @@ def load_tools_from_config(config_path: str) -> ServiceConfig:
         FileNotFoundError: If config file doesn't exist
         ValueError: If config format is invalid
     """
-    path = Path(config_path)
+    path = Path(config_path).resolve()
+    # Ensure config is within the project directory (prevent path traversal)
+    project_root = Path(__file__).resolve().parent.parent.parent
+    if not str(path).startswith(str(project_root)):
+        raise ValueError(f"Config path must be within the project directory")
     if not path.exists():
         raise FileNotFoundError(f"Config file not found: {config_path}")
+    if not path.suffix in (".yaml", ".yml"):
+        raise ValueError("Config file must be a YAML file (.yaml or .yml)")
 
-    with open(path, "r") as f:
+    with open(path, "r", encoding="utf-8") as f:
         config = yaml.safe_load(f)
 
-    if not config:
-        raise ValueError("Empty configuration file")
+    if not isinstance(config, dict):
+        raise ValueError("Config file must contain a YAML mapping")
 
     # Parse service section
     service_config = config.get("service", {})

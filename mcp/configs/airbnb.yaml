@@ -10,7 +10,7 @@
 
 mcp:
   transport: stdio
-  command: "npx -y @openbnb/mcp-server-airbnb --ignore-robots-txt"
+  command: "npx @openbnb/mcp-server-airbnb --ignore-robots-txt"
   timeout: 60
 
 # LLM for natural language understanding (ReAct agent)

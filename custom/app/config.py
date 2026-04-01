@@ -67,9 +67,13 @@ class Settings:
             if not api_key:
                 raise EnvironmentError("OPENAI_API_KEY environment variable is required")
 
+            try:
+                temperature = float(os.getenv("LLM_TEMPERATURE", "0.7"))
+            except ValueError:
+                temperature = 0.7
             self._llm = LLMConfig(
                 model=os.getenv("LLM_MODEL", "gpt-4o-mini"),
-                temperature=float(os.getenv("LLM_TEMPERATURE", "0.7")),
+                temperature=max(0.0, min(2.0, temperature)),
                 api_key=api_key,
             )
         return self._llm

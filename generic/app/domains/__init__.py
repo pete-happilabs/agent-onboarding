@@ -8,12 +8,14 @@ to retrieve domain configurations by name.
 from app.domains.urban_company.config import UrbanCompanyConfig
 from app.domains.swiggy.config import SwiggyConfig
 from app.domains.myntra.config import MyntraConfig
+from app.domains.uber.config import UberConfig
 
 
 DOMAIN_REGISTRY = {
     "urban_company": UrbanCompanyConfig,
     "swiggy": SwiggyConfig,
-    "myntra": MyntraConfig
+    "myntra": MyntraConfig,
+    "uber": UberConfig,
 }
 
 

@@ -8,7 +8,7 @@ from pathlib import Path
 # Add custom root to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from app.core.protocol import (
+from dost.protocol import (
     create_dost_event,
     create_dost_message,
     extract_query_text,

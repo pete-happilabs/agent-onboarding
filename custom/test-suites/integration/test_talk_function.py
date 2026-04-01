@@ -15,7 +15,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 talk_module = importlib.import_module("app.engine.talk")
 talk = talk_module.talk
 
-from app.core.protocol import DOST_SPEC_VERSION
+from dost.protocol import DOST_SPEC_VERSION
 
 
 def _make_mock_settings(entity_id: str = "agent.custom.test"):

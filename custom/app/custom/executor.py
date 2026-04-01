@@ -12,6 +12,7 @@ import json
 import logging
 import re
 from typing import Dict, Any, Optional
+from urllib.parse import quote, urlparse
 
 import httpx
 
@@ -51,6 +52,9 @@ class RESTExecutor:
             timeout: Request timeout in seconds
             default_headers: Default headers for all requests
         """
+        parsed = urlparse(base_url)
+        if parsed.scheme not in ("http", "https"):
+            raise ValueError(f"base_url must use http or https scheme, got: {parsed.scheme or 'none'}")
         self.base_url = base_url.rstrip("/")
         self.auth = auth
         self.timeout = timeout
@@ -166,7 +170,7 @@ class RESTExecutor:
         url = endpoint
         for param in path_params:
             if param in arguments:
-                url = url.replace(f"{{{param}}}", str(arguments[param]))
+                url = url.replace(f"{{{param}}}", quote(str(arguments[param]), safe=""))
             else:
                 raise ValueError(f"Missing path parameter: {param}")
 

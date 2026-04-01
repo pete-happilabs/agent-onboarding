@@ -1,0 +1,35 @@
+# ============================================================================
+# DOST Agent Onboarding - Root Requirements
+# Installs shared module + all dependencies for MCP, Generic, and Custom
+# ============================================================================
+
+# Shared DOST protocol + metrics (install first)
+-e shared/
+
+# ── OpenAI (all 3 templates) ──
+openai>=1.0.0
+
+# ── HTTP / Networking ──
+httpx>=0.25.0
+
+# ── Configuration ──
+pyyaml>=6.0
+python-dotenv>=1.0.0
+
+# ── Generic Agent: FastAPI + LangGraph + Vector Store ──
+fastapi
+uvicorn[standard]
+langchain
+langchain-openai
+langchain-community
+langchain-huggingface
+langgraph
+chromadb
+sentence-transformers
+
+# ── Generic Agent: MongoDB ──
+motor
+pymongo
+
+# ── Generic Agent: Domain Config ──
+pydantic-settings

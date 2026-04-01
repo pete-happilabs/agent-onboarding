@@ -1,12 +1,15 @@
--r ../requirements-common.txt
+# Shared DOST protocol + metrics
+-e ../shared
+
+fastapi
+uvicorn[standard]
 langchain
 langchain-openai
 langchain-community
 langchain-huggingface
-langgraph
 chromadb
 sentence-transformers
+python-dotenv
+langgraph
 motor
 pymongo
-tenacity
-langsmith

@@ -1,0 +1,4 @@
+# Uber Agent - Generic Template
+# Install shared DOST protocol + Generic template dependencies
+-e ../shared
+-r ../generic/requirements.txt

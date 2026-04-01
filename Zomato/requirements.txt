@@ -1,0 +1,4 @@
+# Zomato Agent - Custom REST API Template
+# Install shared DOST protocol + Custom template dependencies
+-e ../shared
+-r ../custom/requirements.txt

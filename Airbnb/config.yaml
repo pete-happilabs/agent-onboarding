@@ -1,0 +1,25 @@
+# ============================================================================
+# Airbnb MCP Agent Configuration
+# ============================================================================
+# Search Airbnb listings and get property details via MCP server.
+# https://github.com/openbnb-org/mcp-server-airbnb
+#
+# Tools discovered automatically from MCP server:
+#   - airbnb_search: Search by location, dates, guests, price
+#   - airbnb_listing_details: Get full property info
+
+mcp:
+  transport: stdio
+  command: "npx @openbnb/mcp-server-airbnb --ignore-robots-txt"
+  timeout: 60
+
+# LLM for natural language understanding (ReAct agent)
+llm:
+  enabled: true
+  model: "gpt-4o-mini"
+  temperature: 0.0
+  # api_key loaded from OPENAI_API_KEY env var
+
+agent:
+  entity_id: "agent.mcp.airbnb"
+  name: "Airbnb"

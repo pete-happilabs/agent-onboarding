@@ -49,3 +49,7 @@ class MyntraConfig(BaseDomainConfig):
     enable_vector_search: bool = False
     currency: str = "INR"
     api_mode: str = "mock"
+
+
+# Singleton instance for dynamic loading via importlib
+config = MyntraConfig()

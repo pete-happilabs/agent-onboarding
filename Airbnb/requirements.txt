@@ -1,0 +1,4 @@
+# Airbnb Agent - MCP Template
+# Install shared DOST protocol + MCP template dependencies
+-e ../shared
+-r ../mcp/requirements.txt
