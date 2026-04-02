@@ -63,19 +63,28 @@ class StdioTransport(Transport):
         import shlex
         import os
 
-        # Parse command properly (handles quotes and special chars)
-        parts = shlex.split(self.command)
-
         # Get current environment and ensure PATH includes npm/node
         env = os.environ.copy()
 
-        self._process = await asyncio.create_subprocess_exec(
-            *parts,
-            stdin=asyncio.subprocess.PIPE,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE,
-            env=env,
-        )
+        # On Windows, use shell=True so .cmd scripts (npx, node) are found
+        if os.name == "nt":
+            self._process = await asyncio.create_subprocess_shell(
+                self.command,
+                stdin=asyncio.subprocess.PIPE,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+                env=env,
+            )
+        else:
+            # Parse command properly (handles quotes and special chars)
+            parts = shlex.split(self.command)
+            self._process = await asyncio.create_subprocess_exec(
+                *parts,
+                stdin=asyncio.subprocess.PIPE,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+                env=env,
+            )
 
         logger.info(f"MCP server started (PID: {self._process.pid})")
 

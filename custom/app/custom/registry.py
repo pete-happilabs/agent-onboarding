@@ -71,9 +71,10 @@ def load_tools_from_config(config_path: str) -> ServiceConfig:
         ValueError: If config format is invalid
     """
     path = Path(config_path).resolve()
-    # Ensure config is within the project directory (prevent path traversal)
+    # Ensure config is within the repo directory (prevent path traversal)
     project_root = Path(__file__).resolve().parent.parent.parent
-    if not str(path).startswith(str(project_root)):
+    repo_root = project_root.parent
+    if not (str(path).startswith(str(project_root)) or str(path).startswith(str(repo_root))):
         raise ValueError(f"Config path must be within the project directory")
     if not path.exists():
         raise FileNotFoundError(f"Config file not found: {config_path}")
