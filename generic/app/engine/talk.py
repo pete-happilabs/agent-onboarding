@@ -13,6 +13,9 @@ from typing import Dict, Any, Tuple
 from dost.protocol import (
     create_dost_event,
     create_dost_message,
+    create_dost_categories,
+    create_dost_category,
+    create_dost_object,
     extract_query_text,
 )
 from dost.metrics import TalkMetrics
@@ -109,6 +112,14 @@ async def talk(event: Dict[str, Any]) -> Tuple[Dict[str, Any], Dict[str, Any]]:
 
         response_text = result.get("response", "I couldn't process that request.")
 
+        # Build dostCategories from tool results (same as MCP/Custom)
+        categories = None
+        event_hint = "response"
+        tool_results = result.get("tool_results", [])
+        if tool_results:
+            categories = _build_categories_from_tools(tool_results, settings)
+            event_hint = _infer_event_hint(tool_results)
+
         logger.info(f"TALK - Response: {len(response_text)} chars, Metrics: {metrics.to_dict()}")
 
         return _build_response(
@@ -116,6 +127,8 @@ async def talk(event: Dict[str, Any]) -> Tuple[Dict[str, Any], Dict[str, Any]]:
             destination_entity_id=entity_id,
             session_id=session_id,
             message_text=response_text,
+            event_hint=event_hint,
+            categories=categories,
         ), metrics.to_dict()
 
     except Exception as e:
@@ -135,8 +148,9 @@ def _build_response(
     session_id: str,
     message_text: str,
     event_hint: str = "response",
+    categories: Dict[str, Any] = None,
 ) -> Dict[str, Any]:
-    """Build a dostEvent response."""
+    """Build a dostEvent response with optional categories."""
     return create_dost_event(
         source_entity_id=agent_entity_id,
         destination_entity_id=destination_entity_id,
@@ -144,4 +158,93 @@ def _build_response(
         event_hint=event_hint,
         is_ai_generated=True,
         message=create_dost_message(text=message_text),
+        categories=categories,
     )
+
+
+def _build_categories_from_tools(
+    tool_results: list,
+    settings,
+) -> Dict[str, Any] | None:
+    """Build dostCategories from LangGraph tool results."""
+    import json
+    import uuid
+
+    if not tool_results:
+        return None
+
+    all_categories = []
+
+    for result in tool_results:
+        tool_name = result.get("name", "unknown")
+        content = result.get("content", "")
+        if result.get("is_error"):
+            continue
+
+        # Try parsing as JSON first (structured data)
+        try:
+            if isinstance(content, str):
+                parsed = json.loads(content)
+            else:
+                parsed = content
+
+            # If parsed is a list, create objects from each item
+            items = parsed if isinstance(parsed, list) else [parsed]
+            objects = []
+            for i, item in enumerate(items):
+                if isinstance(item, dict):
+                    objects.append(create_dost_object(
+                        id=str(item.get("id", f"{tool_name}_{i}_{uuid.uuid4().hex[:8]}")),
+                        type=tool_name,
+                        title=str(item.get("name", item.get("title", f"Item {i + 1}"))),
+                        description=str(item.get("description", "")),
+                    ))
+            if objects:
+                all_categories.append(create_dost_category(
+                    title=_format_tool_name(tool_name),
+                    objects=objects,
+                ))
+                continue
+        except (json.JSONDecodeError, TypeError):
+            pass
+
+        # Fallback: wrap text content as a single dostObject
+        if content and isinstance(content, str) and len(content.strip()) > 0:
+            all_categories.append(create_dost_category(
+                title=_format_tool_name(tool_name),
+                objects=[create_dost_object(
+                    id=f"{tool_name}_{uuid.uuid4().hex[:8]}",
+                    type=tool_name,
+                    title=_format_tool_name(tool_name),
+                    description=content[:2000],
+                )],
+            ))
+
+    if not all_categories:
+        return None
+
+    currency = getattr(settings.generic, "currency", "INR") if hasattr(settings, "generic") else "INR"
+    return create_dost_categories(currency=currency, categories=all_categories)
+
+
+def _infer_event_hint(tool_results: list) -> str:
+    """Infer event hint from tool results."""
+    for result in reversed(tool_results):
+        if not result.get("is_error"):
+            name = result.get("name", "")
+            if name.startswith("search_"):
+                return name.replace("search_", "") + "_list"
+            elif name.startswith("book_"):
+                return name.replace("book_", "") + "_booked"
+            elif name.startswith("get_"):
+                return name.replace("get_", "") + "_details"
+            elif name.startswith("list_"):
+                return name.replace("list_", "") + "_list"
+            elif name:
+                return name + "_response"
+    return "response"
+
+
+def _format_tool_name(name: str) -> str:
+    """Format tool name as human-readable title."""
+    return " ".join(word.capitalize() for word in name.replace("_", " ").split())

@@ -8,7 +8,7 @@ import importlib
 import logging
 from typing import Dict, Any
 
-from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
+from langchain_core.messages import SystemMessage, HumanMessage, AIMessage, ToolMessage
 from langchain_openai import ChatOpenAI
 from langgraph.graph import StateGraph, START, END
 from langgraph.prebuilt import ToolNode, tools_condition
@@ -231,6 +231,16 @@ class GenericReActAgent:
             else:
                 final_response = "I couldn't process that request."
 
+            # Extract tool results from ToolMessage objects
+            tool_results = []
+            for msg in result["messages"]:
+                if isinstance(msg, ToolMessage):
+                    tool_results.append({
+                        "name": msg.name or "unknown",
+                        "content": msg.content,
+                        "is_error": getattr(msg, "status", None) == "error",
+                    })
+
             return {
                 "response": final_response,
                 "state": {
@@ -238,6 +248,7 @@ class GenericReActAgent:
                     "booking_details": result.get("booking_details", {}),
                     "details_shown": result.get("details_shown", False),
                 },
+                "tool_results": tool_results,
                 "input_tokens": self._current_input_tokens,
                 "output_tokens": self._current_output_tokens,
                 "model": self._current_model,
